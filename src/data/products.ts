@@ -14,6 +14,7 @@ export interface Product {
   scentNotes: string[];
   sizes: ProductSize[];
   imageUrl: string;
+  images?: string[];
   badge?: "Bestseller" | "New" | "Limited";
   inStock: boolean;
 }
@@ -34,6 +35,11 @@ export const products: Product[] = [
     ],
     imageUrl:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuDCZ8uEKjqePVk15g-8h40CLySWAgVkEqSByQQzERKpIBL3cBnaeOwwIMf--tDt3xz6UFIc-OyyCk8plIQ8D5gWuO28leaUybiDgDpAXYfzqenABQpzAY9hVUfEGb7oBWK-TiluYCO3aZRB5DSGQTfQRMnRCocOjJi5BkAZC_KAjhU0HnXk-szCLIXKgqUFpGpPjjvdA",
+    images: [
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDCZ8uEKjqePVk15g-8h40CLySWAgVkEqSByQQzERKpIBL3cBnaeOwwIMf--tDt3xz6UFIc-OyyCk8plIQ8D5gWuO28leaUybiDgDpAXYfzqenABQpzAY9hVUfEGb7oBWK-TiluYCO3aZRB5DSGQTfQRMnRCocOjJi5BkAZC_KAjhU0HnXk-szCLIXKgqUFpGpPjjvdA",
+      "https://images.unsplash.com/photo-1602523961358-f9f03dd557db?w=600&q=80",
+      "https://images.unsplash.com/photo-1608181831688-ba943659e786?w=600&q=80",
+    ],
     badge: "Bestseller",
     inStock: true,
   },
@@ -52,6 +58,11 @@ export const products: Product[] = [
     ],
     imageUrl:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuBzvJ73WuY64668n7wCYJHK3dEqiuFnaI9W_O7S6eSiQXZ_G97Zgbo9g5VAYqL4NUzdKcHzNpIF3Q44OG6bVX_YbHBdLlioLrjpAZPhJV3t7Q2iGB7aIyUkrpbqpcr4dA",
+    images: [
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBzvJ73WuY64668n7wCYJHK3dEqiuFnaI9W_O7S6eSiQXZ_G97Zgbo9g5VAYqL4NUzdKcHzNpIF3Q44OG6bVX_YbHBdLlioLrjpAZPhJV3t7Q2iGB7aIyUkrpbqpcr4dA",
+      "https://images.unsplash.com/photo-1614607242094-b1b2cf769ff3?w=600&q=80",
+      "https://images.unsplash.com/photo-1572726729207-a78d6feb18d7?w=600&q=80",
+    ],
     badge: "New",
     inStock: true,
   },
@@ -70,6 +81,11 @@ export const products: Product[] = [
     ],
     imageUrl:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuCV5m1YSJ6tgeGf79eOKWZAG4COFw3XJQSdHsZoQOXps3EM77zdD2H0VLT4v7nN2yOh6TGaQEIBhB2ugIPUaG0k9G6C5FZ8nbAELpzbdTKj4BV9mWXyPRaVIeLJQvLe2ZHeXR-wDz_lXoCQD84YOlLFybBmIBDFBBfIh_6R",
+    images: [
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuCV5m1YSJ6tgeGf79eOKWZAG4COFw3XJQSdHsZoQOXps3EM77zdD2H0VLT4v7nN2yOh6TGaQEIBhB2ugIPUaG0k9G6C5FZ8nbAELpzbdTKj4BV9mWXyPRaVIeLJQvLe2ZHeXR-wDz_lXoCQD84YOlLFybBmIBDFBBfIh_6R",
+      "https://images.unsplash.com/photo-1543006098-3af3e5c984e0?w=600&q=80",
+      "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=600&q=80",
+    ],
     inStock: true,
   },
   {
@@ -87,6 +103,11 @@ export const products: Product[] = [
     ],
     imageUrl:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuB2rT8N_NvldqwycFoszsg-nm_6sTI2iQgdxdPvncsUPzgPi3hVJ_Te4fVtKAEDqHm5GgywmB7jJ1GkMANQlgpOUN36gsFL53m4VIUbGt86FQhV14fP1vXTjZC8tuuG2LqYicrCz8CN9JiQ-DmUe2EFFbroqkJmenzR55L9Mseot0VRHODYZl_z324anFMzyX19NMPKnXsEVGL-k8ctYNZxZHAek7bempXIpktRpaHxs2QSK9OqHsycO6NJYZ2pKPZwTySUtZmJOgU",
+    images: [
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuB2rT8N_NvldqwycFoszsg-nm_6sTI2iQgdxdPvncsUPzgPi3hVJ_Te4fVtKAEDqHm5GgywmB7jJ1GkMANQlgpOUN36gsFL53m4VIUbGt86FQhV14fP1vXTjZC8tuuG2LqYicrCz8CN9JiQ-DmUe2EFFbroqkJmenzR55L9Mseot0VRHODYZl_z324anFMzyX19NMPKnXsEVGL-k8ctYNZxZHAek7bempXIpktRpaHxs2QSK9OqHsycO6NJYZ2pKPZwTySUtZmJOgU",
+      "https://images.unsplash.com/photo-1602523961358-f9f03dd557db?w=600&q=80",
+      "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=600&q=80",
+    ],
     badge: "Bestseller",
     inStock: true,
   },
@@ -105,6 +126,11 @@ export const products: Product[] = [
     ],
     imageUrl:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuCIU5Eg2NSv631pzvRORhVyokxf3fD_BRVFvg3rcts3jPG4nFwa35B4feueu7KeoSdVFNWaUo98_CWeXuzAdT6arMiJXELqLYZMqH1YqJFzIZtUZxLLECf-a8My6VduD9jO3v5HPctsjTLcQn9Wne5ptMTpbwlSzhxZ3ThL8C--DChbIib750orRHq79X3bKUjM4S-yK7LaUqqayzewPPXvjckDLLX9h5VvKuqX6T1_v4JZkBd7h7eOf3WF3Z6lo5JdllVowVZ9Ywo",
+    images: [
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuCIU5Eg2NSv631pzvRORhVyokxf3fD_BRVFvg3rcts3jPG4nFwa35B4feueu7KeoSdVFNWaUo98_CWeXuzAdT6arMiJXELqLYZMqH1YqJFzIZtUZxLLECf-a8My6VduD9jO3v5HPctsjTLcQn9Wne5ptMTpbwlSzhxZ3ThL8C--DChbIib750orRHq79X3bKUjM4S-yK7LaUqqayzewPPXvjckDLLX9h5VvKuqX6T1_v4JZkBd7h7eOf3WF3Z6lo5JdllVowVZ9Ywo",
+      "https://images.unsplash.com/photo-1543006098-3af3e5c984e0?w=600&q=80",
+      "https://images.unsplash.com/photo-1608181831688-ba943659e786?w=600&q=80",
+    ],
     inStock: true,
   },
   {
@@ -122,6 +148,11 @@ export const products: Product[] = [
     ],
     imageUrl:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuBd2KgF5uAG21Af-sdWNCvdkpW0GlO6ZhuGmhIIgqzmGbTRyl0TjYBkaMdx33QhvRupj1BSa2iDS9ZGpvi1gEkelz8gecogm29PTV1rZW7UGhQQLsB16pdKR_tBQ6FqjwQ8gY6C3q7OyzIlXnK4zlMoiPacevJ40w4EyhSU80KgUzyPmvUefudKcOrsdMjgXcGDgtqkiDUYb_8GUktpz3ujEFoCBF39AtucqQCYKbcWWxtF8XQTai1Oa4w-6QO8vLuENGNCBvM_HxQ",
+    images: [
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBd2KgF5uAG21Af-sdWNCvdkpW0GlO6ZhuGmhIIgqzmGbTRyl0TjYBkaMdx33QhvRupj1BSa2iDS9ZGpvi1gEkelz8gecogm29PTV1rZW7UGhQQLsB16pdKR_tBQ6FqjwQ8gY6C3q7OyzIlXnK4zlMoiPacevJ40w4EyhSU80KgUzyPmvUefudKcOrsdMjgXcGDgtqkiDUYb_8GUktpz3ujEFoCBF39AtucqQCYKbcWWxtF8XQTai1Oa4w-6QO8vLuENGNCBvM_HxQ",
+      "https://images.unsplash.com/photo-1572726729207-a78d6feb18d7?w=600&q=80",
+      "https://images.unsplash.com/photo-1614607242094-b1b2cf769ff3?w=600&q=80",
+    ],
     badge: "New",
     inStock: true,
   },
@@ -140,6 +171,11 @@ export const products: Product[] = [
     ],
     imageUrl:
       "https://images.unsplash.com/photo-1602523961358-f9f03dd557db?w=600&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1602523961358-f9f03dd557db?w=600&q=80",
+      "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=600&q=80",
+      "https://images.unsplash.com/photo-1543006098-3af3e5c984e0?w=600&q=80",
+    ],
     badge: "Limited",
     inStock: true,
   },
@@ -158,6 +194,11 @@ export const products: Product[] = [
     ],
     imageUrl:
       "https://images.unsplash.com/photo-1543006098-3af3e5c984e0?w=600&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1543006098-3af3e5c984e0?w=600&q=80",
+      "https://images.unsplash.com/photo-1572726729207-a78d6feb18d7?w=600&q=80",
+      "https://images.unsplash.com/photo-1608181831688-ba943659e786?w=600&q=80",
+    ],
     inStock: true,
   },
   {
@@ -175,6 +216,11 @@ export const products: Product[] = [
     ],
     imageUrl:
       "https://images.unsplash.com/photo-1608181831688-ba943659e786?w=600&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1608181831688-ba943659e786?w=600&q=80",
+      "https://images.unsplash.com/photo-1543006098-3af3e5c984e0?w=600&q=80",
+      "https://images.unsplash.com/photo-1614607242094-b1b2cf769ff3?w=600&q=80",
+    ],
     inStock: true,
   },
   {
@@ -192,6 +238,11 @@ export const products: Product[] = [
     ],
     imageUrl:
       "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=600&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=600&q=80",
+      "https://images.unsplash.com/photo-1602523961358-f9f03dd557db?w=600&q=80",
+      "https://images.unsplash.com/photo-1572726729207-a78d6feb18d7?w=600&q=80",
+    ],
     badge: "Bestseller",
     inStock: true,
   },
@@ -210,6 +261,11 @@ export const products: Product[] = [
     ],
     imageUrl:
       "https://images.unsplash.com/photo-1572726729207-a78d6feb18d7?w=600&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1572726729207-a78d6feb18d7?w=600&q=80",
+      "https://images.unsplash.com/photo-1543006098-3af3e5c984e0?w=600&q=80",
+      "https://images.unsplash.com/photo-1608181831688-ba943659e786?w=600&q=80",
+    ],
     inStock: true,
   },
   {
@@ -227,6 +283,11 @@ export const products: Product[] = [
     ],
     imageUrl:
       "https://images.unsplash.com/photo-1614607242094-b1b2cf769ff3?w=600&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1614607242094-b1b2cf769ff3?w=600&q=80",
+      "https://images.unsplash.com/photo-1602523961358-f9f03dd557db?w=600&q=80",
+      "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=600&q=80",
+    ],
     badge: "New",
     inStock: true,
   },

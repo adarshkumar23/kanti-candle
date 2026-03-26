@@ -28,6 +28,7 @@ export default function ProductDetail() {
 
   const [selectedSize, setSelectedSize] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [activeImage, setActiveImage] = useState(0);
   const [activeAccordion, setActiveAccordion] = useState<string | null>("about");
   const [activeDiscounts, setActiveDiscounts] = useState<ActiveDiscount[]>([]);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
@@ -75,6 +76,7 @@ export default function ProductDetail() {
   }
 
   const size = product.sizes[selectedSize];
+  const galleryImages = product.images || [product.imageUrl];
 
   const handleAddToCart = () => {
     for (let i = 0; i < quantity; i++) {
@@ -109,15 +111,32 @@ export default function ProductDetail() {
       {/* Product Hero */}
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-          {/* Image */}
+          {/* Image Gallery */}
           <div className="reveal">
-            <div className="aspect-square overflow-hidden rounded-sm bg-[var(--color-bg-card)] group">
+            <div className="aspect-square overflow-hidden rounded-sm bg-[var(--color-bg-card)] group mb-4">
               <img
-                src={product.imageUrl}
+                src={galleryImages[activeImage]}
                 alt={product.name}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
               />
             </div>
+            {galleryImages.length > 1 && (
+              <div className="flex gap-3">
+                {galleryImages.map((img, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActiveImage(i)}
+                    className={`w-20 h-20 rounded-sm overflow-hidden border-2 transition-all shrink-0 ${
+                      activeImage === i
+                        ? "border-[var(--color-gold-mid)] opacity-100"
+                        : "border-transparent opacity-50 hover:opacity-80"
+                    }`}
+                  >
+                    <img src={img} alt={`${product.name} view ${i + 1}`} className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Details */}

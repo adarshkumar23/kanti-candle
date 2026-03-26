@@ -2,19 +2,39 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { ShoppingBag, Menu, X, Search } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { products } from "@/data/products";
+
+const navLinks = [
+  { href: "/", label: "Home" },
+  { href: "/shop", label: "Shop" },
+  { href: "/customize", label: "Customize", icon: "✦" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+];
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [scrolled, setScrolled] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { totalItems, setIsCartOpen } = useCart();
+  const pathname = usePathname();
 
-  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+  // Scroll shadow
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // Close search on outside click
   useEffect(() => {
@@ -33,6 +53,11 @@ export default function Navbar() {
     if (isSearchOpen) searchInputRef.current?.focus();
   }, [isSearchOpen]);
 
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
   const filteredProducts = searchQuery.length > 1
     ? products.filter(
         (p) =>
@@ -44,40 +69,60 @@ export default function Navbar() {
 
   return (
     <>
-      <header id="navbar" className="fixed top-0 w-full z-50 glass transition-all duration-300">
+      <header
+        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+          scrolled
+            ? "glass shadow-[0_1px_30px_rgba(0,0,0,0.4)]"
+            : "bg-[var(--color-bg-deep)]/80 backdrop-blur-md"
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <button onClick={toggleMobileMenu} className="text-[var(--color-gold-mid)] hover:text-[var(--color-gold)] transition-colors lg:hidden">
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="text-[var(--color-gold-mid)] hover:text-[var(--color-gold)] transition-colors lg:hidden"
+            aria-label="Open menu"
+          >
             <Menu className="w-6 h-6" />
           </button>
 
-          <Link href="/" className="font-news text-2xl tracking-[0.35em] text-[var(--color-gold-mid)] hover:text-[var(--color-gold)] transition-colors font-light">
-            KANTI
+          {/* Logo */}
+          <Link href="/" className="hover:opacity-85 transition-opacity">
+            <Image src="/kanti-logo.svg" alt="Kanti Candles" width={110} height={62} priority />
           </Link>
 
+          {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-8">
-            <Link href="/" className="nav-btn font-sans text-[10px] uppercase tracking-[0.22em] text-[var(--color-gold-mid)]/70 hover:text-[var(--color-gold)] transition-colors">
-              Home
-            </Link>
-            <Link href="/shop" className="nav-btn font-sans text-[10px] uppercase tracking-[0.22em] text-[var(--color-gold-mid)]/70 hover:text-[var(--color-gold)] transition-colors">
-              Shop
-            </Link>
-            <Link href="/customize" className="nav-btn font-sans text-[10px] uppercase tracking-[0.22em] text-[var(--color-gold-mid)]/70 hover:text-[var(--color-gold)] transition-colors flex items-center gap-1.5">
-              <span className="text-[var(--color-gold)]">✦</span> Customize
-            </Link>
-            <Link href="/about" className="nav-btn font-sans text-[10px] uppercase tracking-[0.22em] text-[var(--color-gold-mid)]/70 hover:text-[var(--color-gold)] transition-colors">
-              About
-            </Link>
-            <Link href="/contact" className="nav-btn font-sans text-[10px] uppercase tracking-[0.22em] text-[var(--color-gold-mid)]/70 hover:text-[var(--color-gold)] transition-colors">
-              Contact
-            </Link>
+            {navLinks.map(({ href, label, icon }) => (
+              <Link
+                key={href}
+                href={href}
+                className={`relative font-sans text-[10px] uppercase tracking-[0.22em] transition-colors group ${
+                  isActive(href)
+                    ? "text-[var(--color-gold)]"
+                    : "text-[var(--color-gold-mid)]/60 hover:text-[var(--color-gold)]"
+                }`}
+              >
+                {icon && <span className="mr-1.5 text-[var(--color-gold)]">{icon}</span>}
+                {label}
+                {/* Active underline */}
+                <span
+                  className={`absolute -bottom-1 left-0 h-px bg-[var(--color-gold)] transition-all duration-300 ${
+                    isActive(href) ? "w-full opacity-50" : "w-0 group-hover:w-full opacity-30"
+                  }`}
+                />
+              </Link>
+            ))}
           </nav>
 
+          {/* Right actions */}
           <div className="flex items-center gap-4">
             {/* Search */}
             <div ref={searchRef} className="relative">
               <button
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
                 className="text-[var(--color-gold-mid)] hover:text-[var(--color-gold)] transition-colors"
+                aria-label="Search"
               >
                 <Search className="w-5 h-5" />
               </button>
@@ -100,9 +145,9 @@ export default function Navbar() {
                           onClick={() => { setIsSearchOpen(false); setSearchQuery(""); }}
                           className="flex items-center gap-3 px-4 py-2.5 hover:bg-[var(--color-bg-card)] transition-colors"
                         >
-                          <img src={p.imageUrl} alt={p.name} className="w-10 h-10 rounded-sm object-cover" />
-                          <div>
-                            <p className="font-sans text-sm text-[var(--color-muted)]">{p.name}</p>
+                          <img src={p.imageUrl} alt={p.name} className="w-10 h-10 rounded-sm object-cover shrink-0" />
+                          <div className="min-w-0">
+                            <p className="font-sans text-sm text-[var(--color-muted)] truncate">{p.name}</p>
                             <p className="font-sans text-[10px] text-[var(--color-faint)]">{p.scentNotes.join(" · ")}</p>
                           </div>
                         </Link>
@@ -120,11 +165,12 @@ export default function Navbar() {
             <button
               onClick={() => setIsCartOpen(true)}
               className="relative text-[var(--color-gold-mid)] hover:text-[var(--color-gold)] transition-colors"
+              aria-label="Open cart"
             >
               <ShoppingBag className="w-5 h-5" />
               {totalItems > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-[var(--color-gold)] text-[var(--color-bg-deep)] text-[8px] font-bold flex items-center justify-center">
-                  {totalItems}
+                  {totalItems > 9 ? "9+" : totalItems}
                 </span>
               )}
             </button>
@@ -132,20 +178,48 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* Mobile Menu */}
-      <div className={`mob-menu fixed inset-y-0 left-0 z-[60] w-72 bg-[var(--color-bg-deep)] flex flex-col p-8 gap-6 ${isMobileMenuOpen ? "open" : ""}`} id="mob-menu">
-        <button onClick={toggleMobileMenu} className="self-end text-[var(--color-faint)] hover:text-[var(--color-gold)] mb-4">
-          <X className="w-6 h-6" />
-        </button>
-        <div className="font-news text-3xl tracking-[0.3em] text-[var(--color-gold-mid)] mb-4">KANTI</div>
-        <Link href="/" onClick={toggleMobileMenu} className="text-left font-sans text-xs uppercase tracking-widest text-[var(--color-muted)] hover:text-[var(--color-gold)] py-3 border-b border-[var(--color-border)]/30">Home</Link>
-        <Link href="/shop" onClick={toggleMobileMenu} className="text-left font-sans text-xs uppercase tracking-widest text-[var(--color-muted)] hover:text-[var(--color-gold)] py-3 border-b border-[var(--color-border)]/30">Shop</Link>
-        <Link href="/customize" onClick={toggleMobileMenu} className="text-left font-sans text-xs uppercase tracking-widest text-[var(--color-gold)] py-3 border-b border-[var(--color-border)]/30 flex items-center gap-2"><span>✦</span> Customize</Link>
-        <Link href="/about" onClick={toggleMobileMenu} className="text-left font-sans text-xs uppercase tracking-widest text-[var(--color-muted)] hover:text-[var(--color-gold)] py-3 border-b border-[var(--color-border)]/30">About</Link>
-        <Link href="/contact" onClick={toggleMobileMenu} className="text-left font-sans text-xs uppercase tracking-widest text-[var(--color-muted)] hover:text-[var(--color-gold)] py-3">Contact</Link>
-      </div>
+      {/* Mobile menu overlay */}
+      <div
+        className={`fixed inset-0 z-[60] bg-black/60 transition-opacity duration-300 ${
+          isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={() => setIsMobileMenuOpen(false)}
+      />
 
-      <div id="mob-overlay" className={`${isMobileMenuOpen ? "fixed" : "hidden"} inset-0 z-50 bg-black/50`} onClick={toggleMobileMenu}></div>
+      {/* Mobile menu drawer */}
+      <div
+        className={`fixed inset-y-0 left-0 z-[70] w-72 bg-[var(--color-bg-deep)] flex flex-col p-8 gap-1 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="flex items-center justify-between mb-8">
+          <Image src="/kanti-logo.svg" alt="Kanti Candles" width={100} height={56} />
+          <button
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="text-[var(--color-faint)] hover:text-[var(--color-gold)] transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {navLinks.map(({ href, label, icon }) => (
+          <Link
+            key={href}
+            href={href}
+            className={`flex items-center gap-2 font-sans text-xs uppercase tracking-widest py-4 border-b border-[var(--color-border)]/20 transition-colors ${
+              isActive(href)
+                ? "text-[var(--color-gold)]"
+                : "text-[var(--color-muted)] hover:text-[var(--color-gold)]"
+            }`}
+          >
+            {icon && <span className="text-[var(--color-gold)]">{icon}</span>}
+            {label}
+            {isActive(href) && (
+              <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[var(--color-gold)]" />
+            )}
+          </Link>
+        ))}
+      </div>
     </>
   );
 }

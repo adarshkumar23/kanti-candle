@@ -60,7 +60,7 @@ export default function Terms() {
         <section className="space-y-4">
           <h2 className="font-display text-2xl text-[var(--color-gold)]">Governing Law</h2>
           <p className="font-sans text-sm text-[var(--color-muted)] leading-relaxed">
-            These terms are governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of the courts of Bangalore, Karnataka.
+            These terms are governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of the courts of Gurgaon, Haryana.
           </p>
         </section>
       </div>

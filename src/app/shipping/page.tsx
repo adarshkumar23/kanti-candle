@@ -39,7 +39,7 @@ export default function Shipping() {
         <section className="space-y-4">
           <h2 className="font-display text-2xl text-[var(--color-gold)]">Order Tracking</h2>
           <p className="font-sans text-sm text-[var(--color-muted)] leading-relaxed">
-            Once your order ships, you will receive a tracking number via email. You can track your shipment through our courier partner&apos;s website. If you have questions about your delivery, contact us at hello@kanticandle.com.
+            Once your order ships, you will receive a tracking number via email. You can track your shipment through our courier partner&apos;s website. If you have questions about your delivery, contact us at kanticandle@gmail.com.
           </p>
         </section>
 

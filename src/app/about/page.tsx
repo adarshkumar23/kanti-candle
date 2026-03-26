@@ -7,7 +7,7 @@ export default function About() {
   useRevealAnimation();
 
   return (
-    <div className="pt-20">
+    <div className="pt-[72px]">
       {/* About Hero */}
       <section className="relative h-[65vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">

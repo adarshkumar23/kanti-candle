@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Sparkles, Image as ImageIcon, ShoppingBag, Package, Tag, LogOut } from "lucide-react";
 
@@ -20,15 +21,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Sidebar / Topbar */}
       <aside className="w-full md:w-64 bg-[var(--color-bg-low)] border-b md:border-r md:border-b-0 border-[var(--color-border)]/20 p-4 md:p-6 flex flex-col">
         <div className="flex justify-between items-center md:block mb-4 md:mb-12">
-          <Link href="/admin" className="font-news text-xl md:text-2xl tracking-[0.3em] text-[var(--color-gold-mid)] block">
-            KANTI <span className="text-[10px] md:text-xs tracking-widest text-[var(--color-faint)] block md:mt-1">Studio Admin</span>
+          <Link href="/admin" className="block">
+            <Image src="/kanti-logo.svg" alt="Kanti Candles" width={150} height={86} />
+            <span className="text-[10px] md:text-xs tracking-widest text-[var(--color-faint)] block md:mt-1">Studio Admin</span>
           </Link>
           <button className="md:hidden flex items-center gap-2 px-3 py-2 text-[var(--color-faint)] font-sans text-[10px] uppercase tracking-widest transition-colors">
             <LogOut className="w-4 h-4" /> Sign Out
           </button>
         </div>
 
-        <nav className="flex flex-row md:flex-col gap-2 overflow-x-auto no-scrollbar pb-2 md:pb-0 flex-1 w-full mask-linear-fade">
+        <nav className="flex flex-row md:flex-col gap-2 overflow-x-auto no-sb pb-2 md:pb-0 flex-1 w-full">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
