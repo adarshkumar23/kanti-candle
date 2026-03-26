@@ -9,28 +9,40 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
     }
 
-    // Initialize the official Gemini SDK
-    const ai = new GoogleGenAI({
-      apiKey: process.env.GEMINI_API_KEY || "", // Ensure you add this to your .env file
+    // Bypass the @google/genai SDK to manually hit generateContent for internal models
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/nano-banana-2:generateContent?key=${process.env.GEMINI_API_KEY}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{
+          role: "user",
+          parts: [{ text: `Generate a photorealistic image representation: A highly realistic, luxurious customized candle: ${prompt}. Photorealistic, elegant lighting, shallow depth of field, commercial product photography, 4k.` }]
+        }]
+      })
     });
 
-    // Call the specified internal model via the Gemini API
-    const response = await ai.models.generateImages({
-      model: 'nano-banana-2',
-      prompt: `A highly realistic, luxurious customized candle: ${prompt}. Photorealistic, elegant lighting, shallow depth of field, commercial product photography, 4k.`,
-      config: {
-        numberOfImages: 1,
-        outputMimeType: 'image/jpeg',
-      }
-    });
-
-    // Extract base64
-    const generatedImage = response.generatedImages?.[0];
-    if (!generatedImage || !generatedImage.image || !generatedImage.image.imageBytes) {
-      throw new Error("No image data returned from Gemini.");
+    const data = await res.json();
+    if (data.error) {
+      throw new Error(data.error.message || "Failed to generate via generateContent REST API.");
     }
-    
-    const base64Image = `data:image/jpeg;base64,${generatedImage.image.imageBytes}`;
+
+    let base64Image = "";
+    if (data.candidates && data.candidates[0]?.content?.parts) {
+      for (const part of data.candidates[0].content.parts) {
+        if (part.inlineData && part.inlineData.data) {
+          base64Image = `data:${part.inlineData.mimeType || 'image/jpeg'};base64,${part.inlineData.data}`;
+          break;
+        } else if (part.text && part.text.length > 500) { 
+          // Fallback if the model returns base64 string directly in text
+          base64Image = part.text.startsWith('data:') ? part.text : `data:image/jpeg;base64,${part.text}`;
+          break;
+        }
+      }
+    }
+
+    if (!base64Image) {
+      throw new Error("No usable image data returned from Nano Banana 2 via generateContent.");
+    }
 
     return NextResponse.json({ imageUrl: base64Image });
   } catch (error: any) {
