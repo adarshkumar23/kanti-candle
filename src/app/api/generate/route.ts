@@ -12,9 +12,16 @@ export async function POST(request: Request) {
     const finalPrompt = `A highly realistic, luxurious customized candle: ${prompt}. Photorealistic, elegant lighting, shallow depth of field, commercial product photography, 4k.`;
     const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}?width=1024&height=1024&nologo=true`;
 
-    // Fetch the raw generated image server-side
-    // Instead of buffering massive base64 strings, we can just hand the URL directly to the browser
-    return NextResponse.json({ imageUrl: imageUrl });
+    // Fetch the raw generated image server-side so the frontend loading spinner actually stays active
+    // during the entire generation process, and then pass it as a guaranteed visual Base64 buffer.
+    const imageResp = await fetch(imageUrl);
+    if (!imageResp.ok) throw new Error("Failed to generate custom candle. Please try again.");
+    
+    const arrayBuffer = await imageResp.arrayBuffer();
+    const base64Data = Buffer.from(arrayBuffer).toString('base64');
+    const base64Image = `data:image/jpeg;base64,${base64Data}`;
+
+    return NextResponse.json({ imageUrl: base64Image });
   } catch (error: any) {
     console.error("AI Generation Error:", error);
     return NextResponse.json({ error: "Failed to generate image." }, { status: 500 });
