@@ -52,3 +52,20 @@ model GalleryImage {
   url       String
   createdAt DateTime @default(now())
 }
+
+model Discount {
+  id            String   @id @default(cuid())
+  code          String   @unique
+  description   String?
+  type          String   @default("percentage") // "percentage" or "fixed"
+  value         Float    // percentage (0-100) or fixed INR amount
+  minOrder      Float    @default(0) // minimum order value to apply
+  maxUses       Int      @default(0) // 0 = unlimited
+  usedCount     Int      @default(0)
+  isActive      Boolean  @default(true)
+  appliesToAll  Boolean  @default(true) // applies to all products
+  categories    String?  // comma-separated category names if not appliesToAll
+  expiresAt     DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}

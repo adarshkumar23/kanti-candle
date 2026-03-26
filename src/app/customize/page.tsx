@@ -3,8 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Sparkles, Loader2 } from "lucide-react";
+import { useCart } from "@/context/CartContext";
+import { useToast } from "@/context/ToastContext";
 
 export default function Customize() {
+  const { addItem, setIsCartOpen } = useCart();
+  const { addToast } = useToast();
   const [mode, setMode] = useState<"manual" | "ai">("manual");
   const [step, setStep] = useState(1);
 
@@ -57,8 +61,17 @@ export default function Customize() {
     }
   };
 
-  const addToCart = () => {
-    alert("Currently Out of Stock. Please check back later!");
+  const handleAddToCart = () => {
+    const name = mode === "manual" ? (labelName || scent) : "AI Custom Candle";
+    addItem({
+      slug: `custom-${Date.now()}`,
+      name,
+      size: mode === "manual" ? size : "Custom",
+      price: totalPrice,
+      imageUrl: mode === "ai" && generatedImg ? generatedImg : "https://images.unsplash.com/photo-1602523961358-f9f03dd557db?w=200&q=60",
+    });
+    addToast(`${name} added to cart`);
+    setIsCartOpen(true);
   };
 
   return (
@@ -289,11 +302,11 @@ export default function Customize() {
               </div>
             </div>
 
-            <button 
-              disabled
-              className="w-full py-4 font-sans text-xs uppercase tracking-[0.22em] font-semibold rounded-sm transition-all bg-[var(--color-bg-card)] text-[var(--color-faint)] cursor-not-allowed opacity-60"
+            <button
+              onClick={handleAddToCart}
+              className="btn-gold w-full py-4 font-sans text-xs uppercase tracking-[0.22em] font-semibold rounded-sm"
             >
-              Out of Stock
+              Add to Cart
             </button>
           </div>
         </div>

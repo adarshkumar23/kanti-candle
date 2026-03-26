@@ -12,26 +12,26 @@ export default function Footer() {
           <div className="space-y-4">
             <h5 className="font-sans text-[10px] uppercase tracking-[0.25em] text-[var(--color-gold)] font-semibold">Shop</h5>
             <Link href="/shop" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">All Candles</Link>
-            <Link href="/shop" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Gift Sets</Link>
-            <Link href="/shop" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Accessories</Link>
+            <Link href="/shop?category=floral" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Floral</Link>
+            <Link href="/shop?category=woody" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Woody</Link>
           </div>
           <div className="space-y-4">
             <h5 className="font-sans text-[10px] uppercase tracking-[0.25em] text-[var(--color-gold)] font-semibold">Experience</h5>
             <Link href="/customize" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">✦ Custom Studio</Link>
-            <Link href="/about" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Scent Journey</Link>
-            <Link href="/about" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Wholesale</Link>
+            <Link href="/about" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Our Story</Link>
+            <Link href="/contact" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Contact Us</Link>
           </div>
           <div className="space-y-4">
-            <h5 className="font-sans text-[10px] uppercase tracking-[0.25em] text-[var(--color-gold)] font-semibold">Story</h5>
-            <Link href="/about" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Our Story</Link>
+            <h5 className="font-sans text-[10px] uppercase tracking-[0.25em] text-[var(--color-gold)] font-semibold">Company</h5>
+            <Link href="/about" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">About Kanti</Link>
             <Link href="/about" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Sustainability</Link>
-            <Link href="/about" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Artisans</Link>
+            <Link href="/contact" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Wholesale</Link>
           </div>
           <div className="space-y-4">
             <h5 className="font-sans text-[10px] uppercase tracking-[0.25em] text-[var(--color-gold)] font-semibold">Legal</h5>
-            <Link href="/" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Privacy Policy</Link>
-            <Link href="/" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Terms of Service</Link>
-            <Link href="/" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Shipping & Returns</Link>
+            <Link href="/privacy" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Terms of Service</Link>
+            <Link href="/shipping" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Shipping & Returns</Link>
           </div>
         </div>
         <div className="border-t border-[var(--color-border)]/10 pt-8 text-center">
