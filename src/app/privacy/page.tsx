@@ -46,14 +46,14 @@ export default function Privacy() {
         <section className="space-y-4">
           <h2 className="font-display text-2xl text-[var(--color-gold)]">Your Rights</h2>
           <p className="font-sans text-sm text-[var(--color-muted)] leading-relaxed">
-            You have the right to access, correct, or delete your personal data. You may also opt out of marketing communications at any time. To exercise these rights, contact us at hello@kanticandle.com.
+            You have the right to access, correct, or delete your personal data. You may also opt out of marketing communications at any time. To exercise these rights, contact us at kanticandle@gmail.com.
           </p>
         </section>
 
         <section className="space-y-4">
           <h2 className="font-display text-2xl text-[var(--color-gold)]">Contact</h2>
           <p className="font-sans text-sm text-[var(--color-muted)] leading-relaxed">
-            For privacy-related inquiries, email us at hello@kanticandle.com or write to: Kanti Candle Studio, Koramangala, Bangalore, Karnataka 560034, India.
+            For privacy-related inquiries, email us at kanticandle@gmail.com or write to: Kanti Candle Studio, Sector 92, Gurgaon, Haryana, India.
           </p>
         </section>
       </div>

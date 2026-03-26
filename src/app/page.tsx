@@ -18,7 +18,7 @@ const testimonials = [
   {
     quote: "I gifted the Sacred Sandalwood to my mother and she was in tears. It reminded her of home. Kanti understands fragrance on a soul level.",
     name: "Arjun Mehta",
-    location: "Bangalore",
+    location: "Delhi",
     rating: 5,
   },
   {
@@ -179,7 +179,7 @@ export default function Home() {
             {testimonials.map((t, i) => (
               <div
                 key={i}
-                className="bg-[var(--color-bg-low)] p-8 rounded-sm border border-[var(--color-border)]/15 flex flex-col gap-5"
+                className="bg-[var(--color-bg-low)] p-8 rounded-sm border border-[var(--color-border)]/15 flex flex-col gap-5 card-hover"
               >
                 <div className="flex gap-1">
                   {Array.from({ length: t.rating }).map((_, j) => (
