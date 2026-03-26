@@ -1,7 +1,4 @@
-<div align="center">
-  <img src="https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=800&q=80" alt="Kanti Candle Banner" width="100%" />
-
-  # 🕯️ Kanti Candle Studio
+# 🕯️ Kanti Candle Studio
   _A handcrafted, labor of love built exclusively for my family._
   <br />
 </div>
