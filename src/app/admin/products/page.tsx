@@ -47,23 +47,36 @@ export default function AdminProducts() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+    const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "kanti_gallery";
+
+    if (!cloudName) {
+      alert("NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME is not set. Please add it in Vercel environment variables.");
+      e.target.value = "";
+      return;
+    }
+
     setUploading(true);
     try {
-      const res = await fetch(`/api/upload?filename=${encodeURIComponent(file.name)}`, {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", uploadPreset);
+      formData.append("folder", "kanti-products");
+
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
         method: "POST",
-        body: file,
+        body: formData,
       });
       const data = await res.json();
-      if (data.url) {
-        setForm((prev) => ({ ...prev, imageUrl: data.url }));
+      if (data.secure_url) {
+        setForm((prev) => ({ ...prev, imageUrl: data.secure_url }));
       } else {
-        alert(`Upload failed: ${data.error || "Unknown error"}`);
+        alert(`Upload failed: ${data.error?.message || "Unknown error"}`);
       }
     } catch {
       alert("Upload failed — check your internet connection and try again.");
     }
     setUploading(false);
-    // Reset file input so the same file can be re-selected after an error
     e.target.value = "";
   };
 
