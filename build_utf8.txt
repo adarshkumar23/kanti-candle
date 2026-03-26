@@ -1,0 +1,166 @@
+﻿
+> kanti-web@0.1.0 build
+> next build
+
+node.exe : ΓÜá 
+`eslint` configuration 
+in next.config.ts is 
+no longer supported. 
+See more info here: htt
+ps://nextjs.org/docs/ap
+p/api-reference/cli/nex
+t#next-lint-options
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (ΓÜá `eslint`    
+ co...xt-lint-optio    
+ns:String) [], Rem    
+oteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+ΓÜá Invalid 
+next.config.ts options 
+detected: 
+ΓÜá     Unrecognized 
+key(s) in object: 
+'eslint'
+ΓÜá See more info 
+here: https://nextjs.or
+g/docs/messages/invalid
+-next-config
+Γû▓ Next.js 16.2.1 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 90s
+  Skipping validation of types
+  Finished TypeScript config validation in 2.5s ...
+  Collecting page data using 3 workers ...
+Error: Failed to load 
+external module @prisma
+/client-2c3a283f134fdcb
+6: Error: Cannot find 
+module '.prisma/client/
+default'
+Require stack:
+- E:\Website\Kanti Cand
+els\v1.0\kanti-web\node
+_modules\@prisma\client
+\default.js
+- E:\Website\Kanti Cand
+els\v1.0\kanti-web\.nex
+t\server\chunks\[root-o
+f-the-server]__0gq4jpz.
+_.js
+- E:\Website\Kanti Cand
+els\v1.0\kanti-web\.nex
+t\server\chunks\[turbop
+ack]_runtime.js
+- E:\Website\Kanti Cand
+els\v1.0\kanti-web\.nex
+t\server\app\api\genera
+te\route.js
+- E:\Website\Kanti Cand
+els\v1.0\kanti-web\node
+_modules\next\dist\serv
+er\require.js
+- E:\Website\Kanti Cand
+els\v1.0\kanti-web\node
+_modules\next\dist\serv
+er\load-components.js
+- E:\Website\Kanti Cand
+els\v1.0\kanti-web\node
+_modules\next\dist\buil
+d\utils.js
+- E:\Website\Kanti Cand
+els\v1.0\kanti-web\node
+_modules\next\dist\buil
+d\worker.js
+- E:\Website\Kanti Cand
+els\v1.0\kanti-web\node
+_modules\next\dist\comp
+iled\jest-worker\proces
+sChild.js
+    at Context.external
+Require [as x] 
+(E:\Website\Kanti Cande
+ls\v1.0\kanti-web\.next
+\server\chunks\[turbopa
+ck]_runtime.js:624:15)
+    at module 
+evaluation 
+(E:\Website\Kanti Cande
+ls\v1.0\kanti-web\.next
+\server\chunks\[root-of
+-the-server]__0gq4jpz._
+.js:1:1017)
+    at 
+instantiateModule 
+(E:\Website\Kanti Cande
+ls\v1.0\kanti-web\.next
+\server\chunks\[turbopa
+ck]_runtime.js:853:9)
+    at getOrInstantiate
+ModuleFromParent 
+(E:\Website\Kanti Cande
+ls\v1.0\kanti-web\.next
+\server\chunks\[turbopa
+ck]_runtime.js:877:12)
+    at 
+Context.esmImport [as 
+i] (E:\Website\Kanti Ca
+ndels\v1.0\kanti-web\.n
+ext\server\chunks\[turb
+opack]_runtime.js:281:2
+0)
+    at module 
+evaluation 
+(E:\Website\Kanti Cande
+ls\v1.0\kanti-web\.next
+\server\chunks\[root-of
+-the-server]__0gq4jpz._
+.js:1:1388)
+    at 
+instantiateModule 
+(E:\Website\Kanti Cande
+ls\v1.0\kanti-web\.next
+\server\chunks\[turbopa
+ck]_runtime.js:853:9)
+    at instantiateRunti
+meModule 
+(E:\Website\Kanti Cande
+ls\v1.0\kanti-web\.next
+\server\chunks\[turbopa
+ck]_runtime.js:882:12)
+    at getOrInstantiate
+RuntimeModule 
+(E:\Website\Kanti Cande
+ls\v1.0\kanti-web\.next
+\server\chunks\[turbopa
+ck]_runtime.js:895:12)
+    at Object.m 
+(E:\Website\Kanti Cande
+ls\v1.0\kanti-web\.next
+\server\chunks\[turbopa
+ck]_runtime.js:898:18)
+
+> Build error occurred
+Error: Failed to 
+collect page data for 
+/api/orders
+    at ignore-listed 
+frames {
+  type: 'Error'
+}
