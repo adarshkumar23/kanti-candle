@@ -39,29 +39,29 @@ export default function AdminDashboard() {
   return (
     <div className="max-w-5xl mx-auto space-y-10 animate-[fadeUp_0.4s_ease]">
       
-      <div className="flex justify-between items-end border-b border-[var(--color-border)]/20 pb-5">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-[var(--color-border)]/20 pb-5 gap-2">
         <div>
-          <h1 className="font-display text-4xl text-[var(--color-gold)]">Gallery Hub</h1>
-          <p className="font-sans text-[var(--color-faint)] text-sm tracking-widest uppercase mt-2">Manage product and lifestyle pictures</p>
+          <h1 className="font-display text-3xl md:text-4xl text-[var(--color-gold)]">Gallery Hub</h1>
+          <p className="font-sans text-[var(--color-faint)] text-xs md:text-sm tracking-widest uppercase mt-2">Manage product and lifestyle pictures</p>
         </div>
       </div>
 
-      <div className="bg-[var(--color-bg-low)] border border-[var(--color-border)]/20 rounded-sm p-8">
-        <h2 className="font-sans text-[10px] uppercase tracking-[0.25em] text-[var(--color-gold-mid)] mb-6">Upload New Picture</h2>
-        <div className="border-2 border-dashed border-[var(--color-border)]/40 hover:border-[var(--color-gold-mid)]/50 transition-colors rounded-sm p-12 flex flex-col items-center justify-center text-center cursor-pointer relative">
+      <div className="bg-[var(--color-bg-low)] border border-[var(--color-border)]/20 rounded-sm p-4 md:p-8">
+        <h2 className="font-sans text-[10px] uppercase tracking-[0.25em] text-[var(--color-gold-mid)] mb-4 md:mb-6">Upload New Picture</h2>
+        <div className="border-2 border-dashed border-[var(--color-border)]/40 hover:border-[var(--color-gold-mid)]/50 transition-colors rounded-sm p-6 md:p-12 flex flex-col items-center justify-center text-center cursor-pointer relative overflow-hidden">
           <input 
             type="file" 
             accept="image/*" 
             className="absolute inset-0 opacity-0 cursor-pointer"
             onChange={(e) => setFile(e.target.files?.[0] || null)}
           />
-          <UploadCloud className="w-10 h-10 text-[var(--color-faint)] mb-4" />
+          <UploadCloud className="w-8 h-8 md:w-10 md:h-10 text-[var(--color-faint)] mb-4" />
           {file ? (
-            <p className="font-sans text-[var(--color-gold)] text-lg">{file.name}</p>
+            <p className="font-sans text-[var(--color-gold)] text-sm md:text-lg w-full truncate px-4">{file.name}</p>
           ) : (
             <>
-              <p className="font-display text-2xl text-[var(--color-muted)] mb-2">Drag & Drop or Click to Browse</p>
-              <p className="font-sans text-xs text-[var(--color-faint)]">Supports JPG, PNG, WEBP max 5MB</p>
+              <p className="font-display text-xl md:text-2xl text-[var(--color-muted)] mb-2 px-2">Drag & Drop or Tap to Browse</p>
+              <p className="font-sans text-[10px] md:text-xs text-[var(--color-faint)]">Supports JPG, PNG, WEBP max 5MB</p>
             </>
           )}
         </div>
@@ -69,9 +69,9 @@ export default function AdminDashboard() {
           <button 
             onClick={handleUpload}
             disabled={!file || uploading}
-            className={`px-8 py-3 font-sans text-xs uppercase tracking-widest rounded-sm font-semibold transition-all ${(!file || uploading) ? "bg-[var(--color-bg-card)] text-[var(--color-faint)] cursor-not-allowed" : "bg-[var(--color-gold-mid)] hover:bg-[var(--color-gold)] text-black shadow-[0_0_15px_rgba(243,190,99,0.2)]"}`}
+            className={`w-full md:w-auto px-8 py-4 md:py-3 font-sans text-[10px] md:text-xs uppercase tracking-widest rounded-sm font-semibold transition-all ${(!file || uploading) ? "bg-[var(--color-bg-card)] text-[var(--color-faint)] cursor-not-allowed" : "bg-[var(--color-gold-mid)] hover:bg-[var(--color-gold)] text-black shadow-[0_0_15px_rgba(243,190,99,0.2)]"}`}
           >
-            {uploading ? "Uploading..." : "Upload Picture"}
+            {uploading ? "Uploading Securely..." : "Upload to Cloud"}
           </button>
         </div>
       </div>
