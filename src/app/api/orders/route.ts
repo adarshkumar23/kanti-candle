@@ -5,6 +5,26 @@ export const dynamic = 'force-dynamic';
 
 const prisma = new PrismaClient();
 
+export async function POST(request: Request) {
+  try {
+    const { customerName, email, totalPrice, itemsData, paymentId } = await request.json();
+
+    const order = await prisma.order.create({
+      data: {
+        customerName,
+        email,
+        totalPrice,
+        itemsData,
+        status: "PENDING",
+      },
+    });
+
+    return NextResponse.json(order);
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}
+
 export async function GET() {
   try {
     let orders = await prisma.order.findMany({

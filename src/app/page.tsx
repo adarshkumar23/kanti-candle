@@ -1,23 +1,66 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
+import { useState } from "react";
+import { getFeaturedProducts } from "@/data/products";
+import { useCart } from "@/context/CartContext";
+import { useToast } from "@/context/ToastContext";
+import { useRevealAnimation } from "@/hooks/useRevealAnimation";
+import { Star } from "lucide-react";
+
+const testimonials = [
+  {
+    quote: "The Noir has completely transformed my evening routine. The scent fills the room within minutes and lingers beautifully.",
+    name: "Priya Sharma",
+    location: "Mumbai",
+    rating: 5,
+  },
+  {
+    quote: "I gifted the Sacred Sandalwood to my mother and she was in tears. It reminded her of home. Kanti understands fragrance on a soul level.",
+    name: "Arjun Mehta",
+    location: "Bangalore",
+    rating: 5,
+  },
+  {
+    quote: "The customizer tool is incredible — I designed a candle for my wedding favours and every guest asked where I got them.",
+    name: "Ananya Reddy",
+    location: "Hyderabad",
+    rating: 5,
+  },
+];
 
 export default function Home() {
-  useEffect(() => {
-    // Reveal animation logic
-    const els = document.querySelectorAll(".reveal");
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) e.target.classList.add("visible");
-        });
-      },
-      { threshold: 0.1 }
-    );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
+  const [email, setEmail] = useState("");
+  const [emailSubmitted, setEmailSubmitted] = useState(false);
+  const featured = getFeaturedProducts(3);
+  const { addItem, setIsCartOpen } = useCart();
+  const { addToast } = useToast();
+  useRevealAnimation();
+
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !email.includes("@")) {
+      addToast("Please enter a valid email address", "error");
+      return;
+    }
+    setEmailSubmitted(true);
+    addToast("Welcome to the inner circle! You\u2019ll hear from us soon.", "success");
+    setEmail("");
+    setTimeout(() => setEmailSubmitted(false), 4000);
+  };
+
+  const handleQuickAdd = (p: typeof featured[0]) => {
+    const defaultSize = p.sizes[1] || p.sizes[0];
+    addItem({
+      slug: p.slug,
+      name: p.name,
+      size: defaultSize.weight,
+      price: defaultSize.price,
+      imageUrl: p.imageUrl,
+    });
+    addToast(`${p.name} added to cart`);
+    setIsCartOpen(true);
+  };
 
   return (
     <div className="page active" id="page-home">
@@ -73,7 +116,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* COLLECTIONS */}
+      {/* FEATURED PRODUCTS */}
       <section className="py-28 px-6 md:px-12 lg:px-24 reveal">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-6">
@@ -84,41 +127,39 @@ export default function Home() {
             <Link href="/shop" className="font-sans text-[10px] uppercase tracking-widest text-[var(--color-gold)] border-b border-[var(--color-gold)]/25 pb-1 hover:border-[var(--color-gold)] transition-colors shrink-0">View All Candles →</Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16">
-            <div className="group cursor-pointer">
-              <div className="aspect-[3/4] overflow-hidden rounded-sm mb-7 bg-[var(--color-bg-card)]">
-                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2rT8N_NvldqwycFoszsg-nm_6sTI2iQgdxdPvncsUPzgPi3hVJ_Te4fVtKAEDqHm5GgywmB7jJ1GkMANQlgpOUN36gsFL53m4VIUbGt86FQhV14fP1vXTjZC8tuuG2LqYicrCz8CN9JiQ-DmUe2EFFbroqkJmenzR55L9Mseot0VRHODYZl_z324anFMzyX19NMPKnXsEVGL-k8ctYNZxZHAek7bempXIpktRpaHxs2QSK9OqHsycO6NJYZ2pKPZwTySUtZmJOgU" alt="The Noir" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            {featured.map((p, i) => (
+              <div key={p.slug} className={`group cursor-pointer ${i === 1 ? "md:mt-20" : ""}`}>
+                <Link href={`/shop/${p.slug}`}>
+                  <div className="aspect-[3/4] overflow-hidden rounded-sm mb-7 bg-[var(--color-bg-card)] relative">
+                    <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <div className="quick-buy absolute inset-0 bg-[var(--color-bg)]/50 flex items-center justify-center rounded-sm">
+                      <button
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleQuickAdd(p); }}
+                        className="btn-gold px-7 py-3 text-[9px] font-bold uppercase tracking-widest rounded-full"
+                      >
+                        Quick Add
+                      </button>
+                    </div>
+                  </div>
+                </Link>
+                <Link href={`/shop/${p.slug}`}>
+                  <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-gold)]/50 mb-2 font-semibold">{p.series}</p>
+                  <h3 className="font-display text-3xl mb-2 group-hover:text-[var(--color-gold)] transition-colors">{p.name}</h3>
+                  <p className="font-sans text-[var(--color-faint)] text-sm leading-relaxed">{p.scentNotes.join(" · ")}</p>
+                </Link>
               </div>
-              <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-gold)]/50 mb-2 font-semibold">Midnight Series</p>
-              <h3 className="font-display text-3xl mb-2 group-hover:text-[var(--color-gold)] transition-colors">The Noir</h3>
-              <p className="font-sans text-[var(--color-faint)] text-sm leading-relaxed">Sandalwood · Oud · Black Pepper</p>
-            </div>
-            <div className="group cursor-pointer md:mt-20">
-              <div className="aspect-[3/4] overflow-hidden rounded-sm mb-7 bg-[var(--color-bg-card)]">
-                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIU5Eg2NSv631pzvRORhVyokxf3fD_BRVFvg3rcts3jPG4nFwa35B4feueu7KeoSdVFNWaUo98_CWeXuzAdT6arMiJXELqLYZMqH1YqJFzIZtUZxLLECf-a8My6VduD9jO3v5HPctsjTLcQn9Wne5ptMTpbwlSzhxZ3ThL8C--DChbIib750orRHq79X3bKUjM4S-yK7LaUqqayzewPPXvjckDLLX9h5VvKuqX6T1_v4JZkBd7h7eOf3WF3Z6lo5JdllVowVZ9Ywo" alt="Ethereal Bloom" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-              </div>
-              <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-gold)]/50 mb-2 font-semibold">Dawn Series</p>
-              <h3 className="font-display text-3xl mb-2 group-hover:text-[var(--color-gold)] transition-colors">Ethereal Bloom</h3>
-              <p className="font-sans text-[var(--color-faint)] text-sm leading-relaxed">Jasmine · Neroli · White Musk</p>
-            </div>
-            <div className="group cursor-pointer">
-              <div className="aspect-[3/4] overflow-hidden rounded-sm mb-7 bg-[var(--color-bg-card)]">
-                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBd2KgF5uAG21Af-sdWNCvdkpW0GlO6ZhuGmhIIgqzmGbTRyl0TjYBkaMdx33QhvRupj1BSa2iDS9ZGpvi1gEkelz8gecogm29PTV1rZW7UGhQQLsB16pdKR_tBQ6FqjwQ8gY6C3q7OyzIlXnK4zlMoiPacevJ40w4EyhSU80KgUzyPmvUefudKcOrsdMjgXcGDgtqkiDUYb_8GUktpz3ujEFoCBF39AtucqQCYKbcWWxtF8XQTai1Oa4w-6QO8vLuENGNCBvM_HxQ" alt="Terra Spirit" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-              </div>
-              <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-gold)]/50 mb-2 font-semibold">Earth Series</p>
-              <h3 className="font-display text-3xl mb-2 group-hover:text-[var(--color-gold)] transition-colors">Terra Spirit</h3>
-              <p className="font-sans text-[var(--color-faint)] text-sm leading-relaxed">Vetiver · Cedar · Moss</p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* STORY AND TEASER SECTIONS */}
+      {/* STORY SECTION */}
       <section className="flex flex-col md:flex-row min-h-[580px] reveal">
         <div className="w-full md:w-1/2 overflow-hidden">
           <img src="https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=800&q=80" alt="Artisan" className="w-full h-full object-cover" style={{ minHeight: "400px" }} />
         </div>
         <div className="w-full md:w-1/2 bg-[var(--color-bg-low)] flex flex-col justify-center p-10 lg:p-20 gap-7">
-          <span className="font-accent italic text-[var(--color-gold)] text-xl">The Artisan's Touch</span>
+          <span className="font-accent italic text-[var(--color-gold)] text-xl">The Artisan&apos;s Touch</span>
           <h2 className="font-display text-5xl md:text-6xl leading-tight font-light">Every light<br />has a story<br />to tell.</h2>
           <p className="font-sans text-[var(--color-muted)] font-light leading-relaxed max-w-md">
             Founded in the heart of India, Kanti is a labor of love. We believe that a candle is more than just light — it&apos;s an invitation to slow down, breathe, and reconnect with your senses.
@@ -127,8 +168,39 @@ export default function Home() {
         </div>
       </section>
 
+      {/* TESTIMONIALS */}
+      <section className="py-28 px-6 md:px-12 lg:px-24 bg-[var(--color-bg-deep)] reveal">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="font-sans text-[10px] uppercase tracking-[0.4em] text-[var(--color-gold-mid)] mb-3">Loved by Many</p>
+            <h2 className="font-display text-5xl md:text-6xl font-light">What Our Community Says</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {testimonials.map((t, i) => (
+              <div
+                key={i}
+                className="bg-[var(--color-bg-low)] p-8 rounded-sm border border-[var(--color-border)]/15 flex flex-col gap-5"
+              >
+                <div className="flex gap-1">
+                  {Array.from({ length: t.rating }).map((_, j) => (
+                    <Star key={j} className="w-4 h-4 fill-[var(--color-gold)] text-[var(--color-gold)]" />
+                  ))}
+                </div>
+                <p className="font-accent italic text-[var(--color-muted)] text-lg leading-relaxed flex-1">
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                <div>
+                  <p className="font-sans text-sm text-[var(--color-cream)] font-medium">{t.name}</p>
+                  <p className="font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]">{t.location}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CUSTOMIZE TEASER */}
-      <section className="relative py-32 px-6 overflow-hidden bg-[var(--color-bg-deep)] text-center reveal">
+      <section className="relative py-32 px-6 overflow-hidden bg-[var(--color-bg)] text-center reveal">
         <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 60% 50% at 50% 60%, rgba(198,150,63,.12) 0%, transparent 70%)" }}></div>
         <div className="relative z-10 max-w-3xl mx-auto space-y-8">
           <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-[var(--color-gold-mid)]">The Kanti Studio - AI Enhanced</span>
@@ -152,10 +224,22 @@ export default function Home() {
             <p className="font-sans text-[var(--color-bg)]/60 font-light max-w-md mx-auto leading-relaxed">
               Be the first to experience limited seasonal drops and exclusive fragrance workshops.
             </p>
-            <div className="max-w-md mx-auto flex flex-col md:flex-row gap-4">
-              <input type="email" placeholder="Your email address" className="flex-grow bg-transparent border-b-2 border-[var(--color-bg)]/20 focus:border-[var(--color-gold-mid)] focus:outline-none text-[var(--color-bg)] placeholder:text-[var(--color-bg)]/40 font-light py-3 text-sm" />
-              <button className="bg-[var(--color-bg)] text-[var(--color-gold)] px-8 py-3 font-sans text-xs uppercase tracking-widest font-semibold rounded-sm hover:bg-[var(--color-bg-high)] transition-colors">Subscribe</button>
-            </div>
+            <form onSubmit={handleNewsletterSubmit} className="max-w-md mx-auto flex flex-col md:flex-row gap-4">
+              <input
+                type="email"
+                placeholder="Your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="flex-grow bg-transparent border-b-2 border-[var(--color-bg)]/20 focus:border-[var(--color-gold-mid)] focus:outline-none text-[var(--color-bg)] placeholder:text-[var(--color-bg)]/40 font-light py-3 text-sm"
+              />
+              <button
+                type="submit"
+                disabled={emailSubmitted}
+                className="bg-[var(--color-bg)] text-[var(--color-gold)] px-8 py-3 font-sans text-xs uppercase tracking-widest font-semibold rounded-sm hover:bg-[var(--color-bg-high)] transition-colors disabled:opacity-50"
+              >
+                {emailSubmitted ? "Subscribed!" : "Subscribe"}
+              </button>
+            </form>
           </div>
         </div>
       </section>

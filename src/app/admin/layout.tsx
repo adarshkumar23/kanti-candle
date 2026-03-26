@@ -2,16 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Sparkles, Image as ImageIcon, ShoppingBag, Settings, LogOut } from "lucide-react";
+import { Sparkles, Image as ImageIcon, ShoppingBag, Package, Tag, LogOut } from "lucide-react";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  
+
   const navItems = [
     { name: "Gallery", href: "/admin", icon: ImageIcon },
+    { name: "Products", href: "/admin/products", icon: Package },
     { name: "Orders", href: "/admin/orders", icon: ShoppingBag },
+    { name: "Discounts", href: "/admin/discounts", icon: Tag },
     { name: "AI Designs", href: "/admin/designs", icon: Sparkles },
-    { name: "Settings", href: "/admin", icon: Settings }, // Settings remains empty prototype
   ];
   
   return (
