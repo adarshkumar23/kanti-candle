@@ -88,7 +88,7 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link href="/" className="hover:opacity-85 transition-opacity">
-            <Image src="/kanti-logo.svg" alt="Kanti Candles" width={110} height={62} priority />
+            <Image src="/kanti-logo.svg" alt="Kanti Candles" width={72} height={40} priority />
           </Link>
 
           {/* Desktop nav */}
@@ -193,7 +193,7 @@ export default function Navbar() {
         }`}
       >
         <div className="flex items-center justify-between mb-8">
-          <Image src="/kanti-logo.svg" alt="Kanti Candles" width={100} height={56} />
+          <Image src="/kanti-logo.svg" alt="Kanti Candles" width={80} height={45} />
           <button
             onClick={() => setIsMobileMenuOpen(false)}
             className="text-[var(--color-faint)] hover:text-[var(--color-gold)] transition-colors"
