@@ -11,18 +11,29 @@ export default function AdminDashboard() {
     "https://lh3.googleusercontent.com/aida-public/AB6AXuBKfh5G09V5s_veL5tO4Kb9QWyv7h5fm79XLAwMPQ0rJxkTdG8fNzV4Jy_lr4jfN8SHlC8eqcu055ZVwf_DsaWdy-5LoIFzHOHJ2J2ii1cO31R_ntGHOsQnKBVaFPRkwePl_XSs_mAwx4wcF9QayPwqUrPMKj7yJiVBZdJ-APCIRbsypNxnw9GMxonXmvJc7uv5GxcxDC5JSdCAkDOLToCtKCVgkOQnpFtxL2G6cTDkhcd90yujwxbTh5uDrbaLUpwDQpQdy2fkbAU",
   ]);
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (!file) return;
     setUploading(true);
-    // Simulate upload delay
-    setTimeout(() => {
-      // Create local object URL for instant preview
-      const newImg = URL.createObjectURL(file);
-      setUploadedImages([newImg, ...uploadedImages]);
+    try {
+      const response = await fetch(`/api/upload?filename=${encodeURIComponent(file.name)}`, {
+        method: "POST",
+        body: file,
+      });
+      const blob = await response.json();
+      
+      if (blob.url) {
+        setUploadedImages([blob.url, ...uploadedImages]);
+        setFile(null);
+        alert("✦ Picture securely uploaded to Vercel Blob!");
+      } else {
+        alert("Upload failed.");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Network error uploading image.");
+    } finally {
       setUploading(false);
-      setFile(null);
-      alert("✦ Picture uploaded successfully to gallery!");
-    }, 1500);
+    }
   };
 
   return (
