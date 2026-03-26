@@ -1,7 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { MapPin, Mail, Phone, Clock, Instagram, MessageCircle } from "lucide-react";
+import { MapPin, Mail, Clock, MessageCircle } from "lucide-react";
+
+function InstagramIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" strokeWidth="0" />
+    </svg>
+  );
+}
 import { useToast } from "@/context/ToastContext";
 import { useRevealAnimation } from "@/hooks/useRevealAnimation";
 
@@ -25,7 +35,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="pt-20">
+    <div className="pt-[72px]">
       {/* Hero */}
       <section className="relative h-[45vh] flex items-center overflow-hidden">
         <div className="absolute inset-0 bg-[var(--color-bg-deep)]">
@@ -146,7 +156,7 @@ export default function Contact() {
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 px-5 py-3 bg-[var(--color-bg-low)] border border-[var(--color-border)]/20 rounded-sm hover:border-[var(--color-gold)]/40 hover:bg-[var(--color-gold)]/5 transition-all group"
                 >
-                  <Instagram className="w-5 h-5 text-[var(--color-gold-mid)] group-hover:text-[var(--color-gold)] transition-colors" />
+                  <InstagramIcon className="w-5 h-5 text-[var(--color-gold-mid)] group-hover:text-[var(--color-gold)] transition-colors" />
                   <span className="font-sans text-[10px] uppercase tracking-widest text-[var(--color-muted)] group-hover:text-[var(--color-gold)] transition-colors">Instagram</span>
                 </a>
                 <a

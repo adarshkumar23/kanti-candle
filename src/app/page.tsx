@@ -63,7 +63,7 @@ export default function Home() {
   };
 
   return (
-    <div className="page active" id="page-home">
+    <div>
       {/* HERO */}
       <section className="relative h-screen w-full flex items-end justify-start overflow-hidden">
         <div className="absolute inset-0">

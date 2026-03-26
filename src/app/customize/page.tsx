@@ -75,7 +75,7 @@ export default function Customize() {
   };
 
   return (
-    <div className="pt-20 min-h-screen bg-[var(--color-bg)]">
+    <div className="pt-[72px] min-h-screen bg-[var(--color-bg)]">
       {/* Studio Header */}
       <div className="bg-[var(--color-bg-deep)] border-b border-[var(--color-border)]/20 px-6 md:px-12 py-10">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-8">

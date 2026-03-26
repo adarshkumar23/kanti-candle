@@ -60,7 +60,7 @@ export default function CartDrawer() {
 
       {/* Drawer */}
       <div
-        className={`fixed top-0 right-0 z-[80] h-full w-full max-w-md bg-[var(--color-bg-deep)] border-l border-[var(--color-border)]/20 flex flex-col transition-transform duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] ${isCartOpen ? "translate-x-0" : "translate-x-full"}`}
+        className={`fixed top-0 right-0 z-[80] h-full w-full max-w-md bg-[var(--color-bg-deep)] border-l border-[var(--color-border)]/20 flex flex-col transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${isCartOpen ? "translate-x-0" : "translate-x-full"}`}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-7 py-6 border-b border-[var(--color-border)]/20">

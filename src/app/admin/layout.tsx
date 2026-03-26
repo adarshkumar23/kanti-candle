@@ -30,7 +30,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </button>
         </div>
 
-        <nav className="flex flex-row md:flex-col gap-2 overflow-x-auto no-scrollbar pb-2 md:pb-0 flex-1 w-full mask-linear-fade">
+        <nav className="flex flex-row md:flex-col gap-2 overflow-x-auto no-sb pb-2 md:pb-0 flex-1 w-full">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
