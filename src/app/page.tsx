@@ -76,17 +76,17 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg)] via-transparent to-transparent"></div>
         </div>
         <div className="relative z-10 px-8 md:px-16 lg:px-24 pb-24 max-w-3xl">
-          <p className="font-accent italic text-[var(--color-gold)] text-lg tracking-widest mb-5 opacity-90">An olfactory awakening</p>
+          <p className="font-accent italic text-[var(--color-gold)] text-lg tracking-widest mb-5 opacity-90">Luxury you can afford. Scents you won&apos;t forget.</p>
           <h1 className="font-display text-7xl md:text-8xl lg:text-[7rem] font-light leading-[0.92] tracking-tight mb-8">
-            Born from<br /><span className="italic text-[var(--color-gold-mid)]">Light.</span>
+            Set the<br /><span className="italic text-[var(--color-gold-mid)]">Mood.</span>
           </h1>
           <p className="font-sans text-[var(--color-muted)] font-light text-lg mb-10 leading-relaxed max-w-lg">
-            Hand-poured in small batches, Kanti candles transform your space into a sanctuary of stillness and soul. Experience affordable luxury with every burn.
+            Hand-poured in Gurgaon with premium fragrance oils and natural wax. From ₹1,350 — because every home deserves to smell extraordinary.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Link href="/shop" className="btn-gold px-10 py-4 font-sans text-xs uppercase tracking-[0.22em] font-semibold rounded-sm">Explore Collection</Link>
+            <Link href="/shop" className="btn-gold px-10 py-4 font-sans text-xs uppercase tracking-[0.22em] font-semibold rounded-sm">Shop Candles</Link>
             <Link href="/customize" className="btn-outline px-10 py-4 font-sans text-xs uppercase tracking-[0.22em] font-semibold rounded-sm flex items-center gap-2">
-              <span className="text-[var(--color-gold)]">✦</span> Create Yours
+              <span className="text-[var(--color-gold)]">✦</span> Build Your Own
             </Link>
           </div>
         </div>
@@ -100,18 +100,18 @@ export default function Home() {
       <div className="py-8 border-y border-[var(--color-border)]/20 bg-[var(--color-bg-deep)] overflow-hidden">
         <div className="marquee-inner flex gap-14 shrink-0">
           <span className="flex items-center gap-14 shrink-0">
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Hand-Poured</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Natural Wax</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Premium Fragrance</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Made in India</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Kanti Candle</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
+            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Free Shipping ₹2000+</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
+            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">80–100 Hr Burn Time</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
+            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">100% Natural Wax</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
+            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Hand-Poured in Gurgaon</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
+            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Gift-Ready Packaging</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
           </span>
           <span className="flex items-center gap-14 shrink-0" aria-hidden="true">
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Hand-Poured</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Natural Wax</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Premium Fragrance</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Made in India</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Kanti Candle</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
+            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Free Shipping ₹2000+</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
+            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">80–100 Hr Burn Time</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
+            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">100% Natural Wax</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
+            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Hand-Poured in Gurgaon</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
+            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Gift-Ready Packaging</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
           </span>
         </div>
       </div>
@@ -121,8 +121,8 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-6">
             <div>
-              <p className="font-sans text-[10px] uppercase tracking-[0.35em] text-[var(--color-gold-mid)] mb-3">Curated for You</p>
-              <h2 className="font-display text-5xl md:text-6xl font-light">Our Collections</h2>
+              <p className="font-sans text-[10px] uppercase tracking-[0.35em] text-[var(--color-gold-mid)] mb-3">India&apos;s Favourite Candle Studio</p>
+              <h2 className="font-display text-5xl md:text-6xl font-light">Bestselling Scents</h2>
             </div>
             <Link href="/shop" className="font-sans text-[10px] uppercase tracking-widest text-[var(--color-gold)] border-b border-[var(--color-gold)]/25 pb-1 hover:border-[var(--color-gold)] transition-colors shrink-0">View All Candles →</Link>
           </div>
@@ -159,12 +159,12 @@ export default function Home() {
           <img src="https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=800&q=80" alt="Artisan" className="w-full h-full object-cover" style={{ minHeight: "400px" }} />
         </div>
         <div className="w-full md:w-1/2 bg-[var(--color-bg-low)] flex flex-col justify-center p-10 lg:p-20 gap-7">
-          <span className="font-accent italic text-[var(--color-gold)] text-xl">The Artisan&apos;s Touch</span>
-          <h2 className="font-display text-5xl md:text-6xl leading-tight font-light">Every light<br />has a story<br />to tell.</h2>
+          <span className="font-accent italic text-[var(--color-gold)] text-xl">Made with intention. Priced with heart.</span>
+          <h2 className="font-display text-5xl md:text-6xl leading-tight font-light">Why settle for<br />ordinary<br />when you can burn<br /><span className="italic text-[var(--color-gold-mid)]">extraordinary?</span></h2>
           <p className="font-sans text-[var(--color-muted)] font-light leading-relaxed max-w-md">
-            Founded in the heart of India, Kanti is a labor of love. We believe that a candle is more than just light — it&apos;s an invitation to slow down, breathe, and reconnect with your senses.
+            Born in Gurgaon, Kanti was built on one belief: premium fragrance should be accessible to everyone. Each candle is hand-poured in small batches, tested for scent throw, and packaged to gift — at a price that actually makes sense.
           </p>
-          <Link href="/about" className="btn-gold w-fit px-8 py-4 font-sans text-xs uppercase tracking-[0.22em] font-semibold rounded-sm">Meet Kanti</Link>
+          <Link href="/about" className="btn-gold w-fit px-8 py-4 font-sans text-xs uppercase tracking-[0.22em] font-semibold rounded-sm">Our Story</Link>
         </div>
       </section>
 
@@ -172,8 +172,8 @@ export default function Home() {
       <section className="py-28 px-6 md:px-12 lg:px-24 bg-[var(--color-bg-deep)] reveal">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <p className="font-sans text-[10px] uppercase tracking-[0.4em] text-[var(--color-gold-mid)] mb-3">Loved by Many</p>
-            <h2 className="font-display text-5xl md:text-6xl font-light">What Our Community Says</h2>
+            <p className="font-sans text-[10px] uppercase tracking-[0.4em] text-[var(--color-gold-mid)] mb-3">2,000+ Happy Homes</p>
+            <h2 className="font-display text-5xl md:text-6xl font-light">People Are Talking</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((t, i) => (
@@ -203,13 +203,13 @@ export default function Home() {
       <section className="relative py-32 px-6 overflow-hidden bg-[var(--color-bg)] text-center reveal">
         <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 60% 50% at 50% 60%, rgba(198,150,63,.12) 0%, transparent 70%)" }}></div>
         <div className="relative z-10 max-w-3xl mx-auto space-y-8">
-          <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-[var(--color-gold-mid)]">The Kanti Studio - AI Enhanced</span>
-          <h2 className="font-display text-6xl md:text-7xl italic font-light">Make It Yours</h2>
+          <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-[var(--color-gold-mid)]">The Kanti Custom Studio</span>
+          <h2 className="font-display text-6xl md:text-7xl italic font-light">A Candle Only<br />You Could Make</h2>
           <p className="font-sans text-[var(--color-muted)] font-light text-lg leading-relaxed max-w-xl mx-auto">
-            Design a candle that tells your story — craft your scent, choose your jar, and let our AI generate the perfect label just for you.
+            Pick your fragrance, choose your vessel, and let AI design a label that&apos;s entirely you. Perfect for gifts, weddings, or just treating yourself the right way.
           </p>
           <Link href="/customize" className="btn-outline px-14 py-5 font-sans text-xs uppercase tracking-[0.3em] font-semibold rounded-sm flex items-center justify-center gap-3 mx-auto w-fit">
-            <span className="text-[var(--color-gold)] text-base">✦</span> Start Customizing
+            <span className="text-[var(--color-gold)] text-base">✦</span> Design Your Candle
           </Link>
         </div>
       </section>
@@ -219,15 +219,15 @@ export default function Home() {
         <div className="max-w-5xl mx-auto bg-[var(--color-cream)] p-12 md:p-20 rounded-sm relative overflow-hidden text-center" style={{ border: "4px solid rgba(198,150,63,.2)" }}>
           <div className="absolute top-0 right-0 w-56 h-56 rounded-full -translate-y-1/2 translate-x-1/2" style={{ background: "rgba(198,150,63,.06)" }}></div>
           <div className="relative z-10 space-y-7">
-            <span className="font-accent italic text-[var(--color-gold-mid)] text-xl">Private Access</span>
-            <h2 className="font-display text-5xl md:text-6xl text-[var(--color-bg)] font-light">Join the Inner Circle</h2>
+            <span className="font-accent italic text-[var(--color-gold-mid)] text-xl">10% off your first order</span>
+            <h2 className="font-display text-5xl md:text-6xl text-[var(--color-bg)] font-light">Get Your Welcome Gift</h2>
             <p className="font-sans text-[var(--color-bg)]/60 font-light max-w-md mx-auto leading-relaxed">
-              Be the first to experience limited seasonal drops and exclusive fragrance workshops.
+              Subscribe and receive an exclusive discount code instantly — plus early access to seasonal drops and members-only offers.
             </p>
             <form onSubmit={handleNewsletterSubmit} className="max-w-md mx-auto flex flex-col md:flex-row gap-4">
               <input
                 type="email"
-                placeholder="Your email address"
+                placeholder="Enter your email for 10% off"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="flex-grow bg-transparent border-b-2 border-[var(--color-bg)]/20 focus:border-[var(--color-gold-mid)] focus:outline-none text-[var(--color-bg)] placeholder:text-[var(--color-bg)]/40 font-light py-3 text-sm"
@@ -237,7 +237,7 @@ export default function Home() {
                 disabled={emailSubmitted}
                 className="bg-[var(--color-bg)] text-[var(--color-gold)] px-8 py-3 font-sans text-xs uppercase tracking-widest font-semibold rounded-sm hover:bg-[var(--color-bg-high)] transition-colors disabled:opacity-50"
               >
-                {emailSubmitted ? "Subscribed!" : "Subscribe"}
+                {emailSubmitted ? "Check Your Inbox ✓" : "Claim 10% Off"}
               </button>
             </form>
           </div>
