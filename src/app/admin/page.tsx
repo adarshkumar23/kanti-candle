@@ -1,15 +1,25 @@
 "use client";
 
-import { useState } from "react";
-import { UploadCloud } from "lucide-react";
+import { useState, useEffect } from "react";
+import { UploadCloud, Loader2 } from "lucide-react";
 
 export default function AdminDashboard() {
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [uploadedImages, setUploadedImages] = useState([
-    "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&q=80",
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuBKfh5G09V5s_veL5tO4Kb9QWyv7h5fm79XLAwMPQ0rJxkTdG8fNzV4Jy_lr4jfN8SHlC8eqcu055ZVwf_DsaWdy-5LoIFzHOHJ2J2ii1cO31R_ntGHOsQnKBVaFPRkwePl_XSs_mAwx4wcF9QayPwqUrPMKj7yJiVBZdJ-APCIRbsypNxnw9GMxonXmvJc7uv5GxcxDC5JSdCAkDOLToCtKCVgkOQnpFtxL2G6cTDkhcd90yujwxbTh5uDrbaLUpwDQpQdy2fkbAU",
-  ]);
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+  const [loadingGallery, setLoadingGallery] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/gallery')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setUploadedImages(data.map((img: any) => img.url));
+        }
+      })
+      .catch(console.error)
+      .finally(() => setLoadingGallery(false));
+  }, []);
 
   const handleUpload = async () => {
     if (!file) return;
@@ -78,16 +88,28 @@ export default function AdminDashboard() {
 
       <div>
         <h2 className="font-sans text-[10px] uppercase tracking-[0.25em] text-[var(--color-gold-mid)] mb-6">Recent Uploads</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-          {uploadedImages.map((src, i) => (
-            <div key={i} className="aspect-square rounded-sm overflow-hidden border border-[var(--color-border)]/20 relative group">
-              <img src={src} alt="Uploaded" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <button className="text-[var(--color-gold)] border border-[var(--color-gold)] px-4 py-2 font-sans text-[9px] uppercase tracking-widest rounded-sm hover:bg-[var(--color-gold)]/10">Use in Shop</button>
+        
+        {loadingGallery ? (
+          <div className="flex items-center justify-center py-20 text-[var(--color-faint)]">
+            <Loader2 className="w-8 h-8 animate-spin opacity-50" />
+          </div>
+        ) : uploadedImages.length === 0 ? (
+          <div className="border border-dashed border-[var(--color-border)]/30 rounded-sm py-16 flex flex-col items-center justify-center text-center">
+            <p className="font-display text-xl text-[var(--color-muted)] mb-2">Gallery is pristine</p>
+            <p className="font-sans text-xs text-[var(--color-faint)]">Your securely uploaded images will appear here.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+            {uploadedImages.map((src, i) => (
+              <div key={i} className="aspect-square rounded-sm overflow-hidden border border-[var(--color-border)]/20 relative group">
+                <img src={src} alt="Uploaded" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                   <button className="text-[var(--color-gold)] border border-[var(--color-gold)] px-4 py-2 font-sans text-[9px] uppercase tracking-widest rounded-sm hover:bg-[var(--color-gold)]/10">Use in Shop</button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

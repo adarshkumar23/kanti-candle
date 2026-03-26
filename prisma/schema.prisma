@@ -46,3 +46,9 @@ model AiDesign {
   imageUrl    String
   createdAt   DateTime @default(now())
 }
+
+model GalleryImage {
+  id        String   @id @default(cuid())
+  url       String
+  createdAt DateTime @default(now())
+}

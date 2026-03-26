@@ -1,9 +1,18 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Sparkles, Image as ImageIcon, ShoppingBag, Settings, LogOut } from "lucide-react";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  // In a real app we'd use getServerSession and redirect to /admin/login if no user.
-  // For the prototype we'll assume logged in.
+  const pathname = usePathname();
+  
+  const navItems = [
+    { name: "Gallery", href: "/admin", icon: ImageIcon },
+    { name: "Orders", href: "/admin/orders", icon: ShoppingBag },
+    { name: "AI Designs", href: "/admin/designs", icon: Sparkles },
+    { name: "Settings", href: "/admin", icon: Settings }, // Settings remains empty prototype
+  ];
   
   return (
     <div className="min-h-[100dvh] bg-[var(--color-bg-deep)] text-[var(--color-muted)] flex flex-col md:flex-row">
@@ -19,18 +28,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
 
         <nav className="flex flex-row md:flex-col gap-2 overflow-x-auto no-scrollbar pb-2 md:pb-0 flex-1 w-full mask-linear-fade">
-          <Link href="/admin" className="flex items-center gap-2 md:gap-3 whitespace-nowrap px-4 py-3 rounded-sm bg-[var(--color-bg-card)] text-[var(--color-gold)] border border-[var(--color-gold-mid)]/30 font-sans text-[10px] md:text-xs uppercase tracking-widest shrink-0">
-            <ImageIcon className="w-4 h-4" /> Gallery
-          </Link>
-          <Link href="/admin" className="flex items-center gap-2 md:gap-3 whitespace-nowrap px-4 py-3 rounded-sm hover:bg-[var(--color-bg-card)] text-[var(--color-faint)] hover:text-[var(--color-muted)] font-sans text-[10px] md:text-xs uppercase tracking-widest transition-colors shrink-0">
-            <ShoppingBag className="w-4 h-4" /> Orders
-          </Link>
-          <Link href="/admin" className="flex items-center gap-2 md:gap-3 whitespace-nowrap px-4 py-3 rounded-sm hover:bg-[var(--color-bg-card)] text-[var(--color-faint)] hover:text-[var(--color-muted)] font-sans text-[10px] md:text-xs uppercase tracking-widest transition-colors shrink-0">
-            <Sparkles className="w-4 h-4" /> AI Designs
-          </Link>
-          <Link href="/admin" className="flex items-center gap-2 md:gap-3 whitespace-nowrap px-4 py-3 rounded-sm hover:bg-[var(--color-bg-card)] text-[var(--color-faint)] hover:text-[var(--color-muted)] font-sans text-[10px] md:text-xs uppercase tracking-widest transition-colors shrink-0">
-            <Settings className="w-4 h-4" /> Settings
-          </Link>
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link key={item.name} href={item.href} className={`flex items-center gap-2 md:gap-3 whitespace-nowrap px-4 py-3 rounded-sm font-sans text-[10px] md:text-xs uppercase tracking-widest shrink-0 transition-colors ${isActive ? "bg-[var(--color-bg-card)] text-[var(--color-gold)] border border-[var(--color-gold-mid)]/30" : "hover:bg-[var(--color-bg-card)] text-[var(--color-faint)] hover:text-[var(--color-muted)]"}`}>
+                <item.icon className="w-4 h-4" /> {item.name}
+              </Link>
+            )
+          })}
         </nav>
 
         <button className="hidden md:flex items-center gap-3 px-4 py-3 text-[var(--color-faint)] hover:text-[var(--color-gold)] font-sans text-xs uppercase tracking-widest transition-colors mt-auto">

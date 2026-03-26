@@ -1,5 +1,8 @@
 import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 export async function POST(request: Request): Promise<NextResponse> {
   try {
@@ -13,6 +16,9 @@ export async function POST(request: Request): Promise<NextResponse> {
     const blob = await put(filename, request.body, {
       access: 'public',
     });
+
+    // Save strictly to the Postgres Cloud DB natively 
+    await prisma.galleryImage.create({ data: { url: blob.url } });
 
     return NextResponse.json(blob);
   } catch (err: any) {
