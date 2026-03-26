@@ -1,6 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
-import { MessageCircle, Mail } from "lucide-react";
+import { useState } from "react";
 
 function InstagramIcon({ className }: { className?: string }) {
   return (
@@ -12,59 +14,130 @@ function InstagramIcon({ className }: { className?: string }) {
   );
 }
 
+const navCols = [
+  {
+    heading: "Shop",
+    links: [
+      { href: "/shop", label: "All Candles" },
+      { href: "/shop?category=floral", label: "Floral" },
+      { href: "/shop?category=woody", label: "Woody" },
+      { href: "/shop?category=citrus", label: "Citrus" },
+      { href: "/quiz", label: "Scent Quiz" },
+    ],
+  },
+  {
+    heading: "Atelier",
+    links: [
+      { href: "/about", label: "Our Story" },
+      { href: "/customize", label: "Custom Studio" },
+      { href: "/contact", label: "Contact Us" },
+      { href: "/shipping", label: "Shipping & Returns" },
+      { href: "/privacy", label: "Privacy Policy" },
+    ],
+  },
+];
+
 export default function Footer() {
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !email.includes("@")) return;
+    setSubmitted(true);
+    setEmail("");
+    setTimeout(() => setSubmitted(false), 4000);
+  };
+
   return (
-    <footer className="bg-[var(--color-bg-deep)] border-t border-[var(--color-border)]/10 px-8 md:px-16 py-16">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-14">
-          <div className="mx-auto w-fit">
-            <Image src="/kanti-logo.svg" alt="Kanti Candles" width={120} height={68} />
+    <footer className="bg-[#0d0d0d] pt-16 pb-8 px-4 md:px-8 lg:px-16">
+      <div className="max-w-5xl mx-auto">
+        {/* Top row: logo + tagline + newsletter */}
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-10 mb-12">
+          {/* Brand */}
+          <div className="shrink-0">
+            <Image
+              src="/kanti-logo.svg"
+              alt="Kanti Candles"
+              width={80}
+              height={32}
+              className="h-8 w-auto mb-3"
+            />
+            <p className="text-[9px] uppercase tracking-[0.25em] text-[#6e6754]">
+              Artisanal candles, hand-poured in Gurgaon
+            </p>
+            {/* Instagram */}
+            <div className="mt-5">
+              <a
+                href="https://www.instagram.com/kanticandles/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-[#6e6754] hover:text-[#e6c364] transition-colors duration-300 group"
+              >
+                <InstagramIcon className="w-4 h-4" />
+                <span className="text-[9px] uppercase tracking-[0.2em]">@kanticandles</span>
+              </a>
+            </div>
           </div>
-          <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-faint)]/40 mt-3">Hand-poured with love in India</p>
-          {/* Social Icons */}
-          <div className="flex justify-center gap-4 mt-6">
-            <a href="https://www.instagram.com/kanticandles/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-[var(--color-border)]/25 flex items-center justify-center hover:border-[var(--color-gold)]/50 hover:bg-[var(--color-gold)]/5 transition-all group">
-              <InstagramIcon className="w-4 h-4 text-[var(--color-faint)]/50 group-hover:text-[var(--color-gold)] transition-colors" />
-            </a>
-            <a href="https://wa.me/+919999999999?text=Hi%20Kanti%20Candle!" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-[var(--color-border)]/25 flex items-center justify-center hover:border-[var(--color-gold)]/50 hover:bg-[var(--color-gold)]/5 transition-all group">
-              <MessageCircle className="w-4 h-4 text-[var(--color-faint)]/50 group-hover:text-[var(--color-gold)] transition-colors" />
-            </a>
-            <a href="mailto:kanticandle@gmail.com" className="w-10 h-10 rounded-full border border-[var(--color-border)]/25 flex items-center justify-center hover:border-[var(--color-gold)]/50 hover:bg-[var(--color-gold)]/5 transition-all group">
-              <Mail className="w-4 h-4 text-[var(--color-faint)]/50 group-hover:text-[var(--color-gold)] transition-colors" />
-            </a>
+
+          {/* Newsletter */}
+          <div className="max-w-xs w-full">
+            <p className="text-[9px] uppercase tracking-[0.25em] text-[#e6c364] mb-3">
+              Join the Inner Circle
+            </p>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+              <input
+                type="email"
+                className="input-line w-full py-2 text-[11px]"
+                placeholder="your@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <button
+                type="submit"
+                disabled={submitted}
+                className="btn-gold py-2.5 text-[9px] uppercase tracking-[0.2em] rounded-sm disabled:opacity-50"
+              >
+                {submitted ? "Subscribed ✓" : "Subscribe for 10% Off"}
+              </button>
+            </form>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-12">
-          <div className="space-y-4">
-            <h5 className="font-sans text-[10px] uppercase tracking-[0.25em] text-[var(--color-gold)] font-semibold">Shop</h5>
-            <Link href="/shop" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">All Candles</Link>
-            <Link href="/shop?category=floral" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Floral</Link>
-            <Link href="/shop?category=woody" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Woody</Link>
-          </div>
-          <div className="space-y-4">
-            <h5 className="font-sans text-[10px] uppercase tracking-[0.25em] text-[var(--color-gold)] font-semibold">Experience</h5>
-            <Link href="/customize" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">✦ Custom Studio</Link>
-            <Link href="/about" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Our Story</Link>
-            <Link href="/contact" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Contact Us</Link>
-          </div>
-          <div className="space-y-4">
-            <h5 className="font-sans text-[10px] uppercase tracking-[0.25em] text-[var(--color-gold)] font-semibold">Company</h5>
-            <Link href="/about" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">About Kanti</Link>
-            <Link href="/about" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Sustainability</Link>
-            <Link href="/contact" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Wholesale</Link>
-          </div>
-          <div className="space-y-4">
-            <h5 className="font-sans text-[10px] uppercase tracking-[0.25em] text-[var(--color-gold)] font-semibold">Legal</h5>
-            <Link href="/privacy" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Terms of Service</Link>
-            <Link href="/shipping" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Shipping & Returns</Link>
-          </div>
+        {/* Divider */}
+        <div className="h-[1px] bg-[#1c1c1c] mb-10" />
+
+        {/* Nav links */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+          {navCols.map((col) => (
+            <div key={col.heading} className="space-y-3">
+              <p className="text-[9px] uppercase tracking-[0.25em] text-[#4d4637] font-medium">
+                {col.heading}
+              </p>
+              {col.links.map(({ href, label }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="block text-[9px] uppercase tracking-[0.15em] text-[#6e6754] hover:text-[#e6c364] transition-colors duration-300"
+                >
+                  {label}
+                </Link>
+              ))}
+            </div>
+          ))}
         </div>
 
-        <div className="border-t border-[var(--color-border)]/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-sans text-[9px] tracking-widest uppercase text-[var(--color-faint)]/30">&copy; 2026 Kanti Candle. All rights reserved.</p>
-          <p className="font-sans text-[9px] tracking-widest uppercase text-[var(--color-faint)]/30">Sector 92, Gurgaon, Haryana, India</p>
+        {/* Divider */}
+        <div className="h-[1px] bg-[#1c1c1c] mb-6" />
+
+        {/* Bottom row */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-3">
+          <p className="text-[9px] uppercase tracking-widest text-[#4d4637]">
+            © KANTI ATELIER MMXXVI
+          </p>
+          <p className="text-[9px] uppercase tracking-widest text-[#4d4637]">
+            Sector 92, Gurgaon, Haryana
+          </p>
         </div>
       </div>
     </footer>

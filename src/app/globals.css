@@ -1,117 +1,195 @@
+/* ─── Google Fonts ─────────────────────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap");
+
 @import "tailwindcss";
 
+/* ─── Design Tokens ────────────────────────────────────────── */
 @theme {
+  --color-primary: #e6c364;
+  --color-primary-container: #c9a84c;
+  --color-on-primary: #1c1a0d;
+  --color-on-primary-container: #fdf0c2;
+  --color-surface: #131313;
+  --color-surface-container-lowest: #0d0d0d;
+  --color-surface-container-low: #1c1c1c;
+  --color-surface-container: #202020;
+  --color-surface-container-high: #2a2a2a;
+  --color-surface-container-highest: #333333;
+  --color-surface-bright: #252525;
+  --color-on-surface: #e5e2e1;
+  --color-on-surface-variant: #cac5be;
+  --color-outline: #6e6754;
+  --color-outline-variant: #4d4637;
+  --color-secondary-fixed: #c9a675;
+
+  /* Legacy aliases kept for backward compat */
   --color-bg: #131313;
-  --color-bg-low: #1C1B1B;
-  --color-bg-card: #201F1F;
-  --color-bg-high: #2A2A2A;
-  --color-bg-deep: #0E0E0E;
-  --color-gold: #F3BE63;
-  --color-gold-mid: #C6963F;
-  --color-gold-dim: #9A7028;
-  --color-cream: #F7F0E3;
-  --color-muted: #D3C4B2;
-  --color-faint: #9B8F7E;
-  --color-border: #4F4537;
+  --color-bg-low: #1c1c1c;
+  --color-bg-card: #202020;
+  --color-bg-high: #2a2a2a;
+  --color-bg-deep: #0d0d0d;
+  --color-gold: #e6c364;
+  --color-gold-mid: #c9a84c;
+  --color-gold-dim: #9a7028;
+  --color-cream: #fdf0c2;
+  --color-muted: #cac5be;
+  --color-faint: #6e6754;
+  --color-border: #4d4637;
 
   --font-display: "Cormorant Garamond", serif;
-  --font-accent: "Playfair Display", serif;
-  --font-news: "Newsreader", serif;
+  --font-accent: "Cormorant Garamond", serif;
   --font-sans: "DM Sans", sans-serif;
+
+  --radius-DEFAULT: 0.125rem;
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.5rem;
 }
 
-/* ─── Reset ─────────────────────────────────────────────── */
+/* ─── Reset ─────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
-
 html { scroll-behavior: smooth; }
 
 body {
-  background: var(--color-bg);
+  background: #131313;
   color: #e5e2e1;
-  font-family: var(--font-sans);
+  font-family: "DM Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* ─── Page enter animation ───────────────────────────────── */
+/* ─── Nocturnal Glow ─────────────────────────────────────────── */
+.nocturnal-glow {
+  text-shadow: 0 0 12px rgba(230, 195, 100, 0.3);
+}
+
+/* ─── Glass Note ─────────────────────────────────────────────── */
+.glass-note {
+  background: rgba(42, 42, 42, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ─── Parallax BG ────────────────────────────────────────────── */
+.parallax-bg {
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+}
+
+/* ─── Page Enter ─────────────────────────────────────────────── */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 .page-enter {
-  animation: fadeUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* ─── Glassmorphism nav ──────────────────────────────────── */
+/* ─── Serif Italic ───────────────────────────────────────────── */
+.serif-italic {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+}
+
+/* ─── Card Hover ─────────────────────────────────────────────── */
+.card-hover {
+  transition: transform 700ms ease;
+}
+.card-hover:hover {
+  transform: scale(1.02);
+}
+
+/* ─── Bottom Nav Safe ─────────────────────────────────────────── */
+.bottom-nav-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* ─── Hide Scrollbar ─────────────────────────────────────────── */
+.no-sb { -ms-overflow-style: none; scrollbar-width: none; }
+.no-sb::-webkit-scrollbar { display: none; }
+
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+
+/* ─── Input Line ─────────────────────────────────────────────── */
+.input-line {
+  border: none;
+  border-bottom: 0.5px solid #4d4637;
+  background: transparent;
+  outline: none;
+  color: #e5e2e1;
+  transition: border-color 0.3s;
+}
+.input-line::placeholder {
+  color: #6e6754;
+}
+.input-line:focus {
+  border-bottom: 2px solid #e6c364;
+  box-shadow: 0 2px 8px rgba(230, 195, 100, 0.15);
+}
+
+/* ─── Marquee ────────────────────────────────────────────────── */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 25s linear infinite;
+  display: flex;
+  white-space: nowrap;
+}
+
+/* ─── Glassmorphism ──────────────────────────────────────────── */
 .glass {
-  background: rgba(14, 14, 14, 0.80);
+  background: rgba(13, 13, 13, 0.80);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
 
-/* ─── Marquee ────────────────────────────────────────────── */
-.marquee-inner {
-  display: flex;
-  gap: 4rem;
-  white-space: nowrap;
-  animation: marquee 32s linear infinite;
-}
-@keyframes marquee {
-  to { transform: translateX(-50%); }
-}
-
-/* ─── Buttons ────────────────────────────────────────────── */
+/* ─── Buttons ────────────────────────────────────────────────── */
 .btn-gold {
-  background: var(--color-gold-mid);
-  color: #3a2600;
-  transition: background 0.3s, box-shadow 0.3s, transform 0.15s;
+  background: #c9a84c;
+  color: #1c1a0d;
+  transition: background 0.5s, box-shadow 0.5s;
   cursor: pointer;
 }
 .btn-gold:hover {
-  background: var(--color-gold);
-  box-shadow: 0 0 28px rgba(243, 190, 99, 0.35);
-  transform: translateY(-1px);
+  background: #e6c364;
+  box-shadow: 0 0 28px rgba(230, 195, 100, 0.3);
 }
-.btn-gold:active { transform: translateY(0); }
 
 .btn-outline {
-  border: 1px solid var(--color-gold-mid);
-  color: var(--color-gold);
-  transition: background 0.3s, box-shadow 0.3s, transform 0.15s;
+  border: 1px solid #c9a84c;
+  color: #e6c364;
+  transition: background 0.5s, box-shadow 0.5s;
   cursor: pointer;
 }
 .btn-outline:hover {
-  background: rgba(198, 150, 63, 0.1);
-  box-shadow: 0 0 22px rgba(243, 190, 99, 0.18);
-  transform: translateY(-1px);
+  background: rgba(201, 168, 76, 0.1);
+  box-shadow: 0 0 22px rgba(230, 195, 100, 0.15);
 }
-.btn-outline:active { transform: translateY(0); }
 
-/* ─── No scrollbar ───────────────────────────────────────── */
-.no-sb::-webkit-scrollbar { display: none; }
-.no-sb { -ms-overflow-style: none; scrollbar-width: none; }
-
-/* ─── Product card ───────────────────────────────────────── */
+/* ─── Product card ───────────────────────────────────────────── */
 .prod-img-wrap {
   overflow: hidden;
-  aspect-ratio: 1 / 1;
-  background: var(--color-bg-card);
+  aspect-ratio: 4 / 5;
+  background: #202020;
 }
 .prod-img-wrap img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
 }
-.prod-card:hover .prod-img-wrap img { transform: scale(1.07); }
+.prod-card:hover .prod-img-wrap img { transform: scale(1.05); }
 .prod-card:hover .quick-buy { opacity: 1; }
 .quick-buy {
   opacity: 0;
   transition: opacity 0.35s ease;
 }
 
-/* ─── Scroll reveal ──────────────────────────────────────── */
+/* ─── Scroll reveal ──────────────────────────────────────────── */
 .reveal {
   opacity: 0;
   transform: translateY(32px);
@@ -123,32 +201,68 @@ body {
   transform: translateY(0);
 }
 
-/* ─── Scent card ─────────────────────────────────────────── */
+/* ─── Scent card ─────────────────────────────────────────────── */
 .scent-selected {
-  border-color: rgba(198, 150, 63, 0.7) !important;
-  box-shadow: 0 0 18px rgba(243, 190, 99, 0.14);
+  border-color: rgba(201, 168, 76, 0.7) !important;
+  box-shadow: 0 0 18px rgba(230, 195, 100, 0.14);
 }
 
-/* ─── Wax swatch ─────────────────────────────────────────── */
-.swatch {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: border-color 0.2s, box-shadow 0.2s;
+/* ─── Toast ──────────────────────────────────────────────────── */
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(28px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
-.swatch.active {
-  border-color: var(--color-gold);
-  box-shadow: 0 0 12px rgba(243, 190, 99, 0.45);
+@keyframes toastOut {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(28px); }
 }
 
-/* ─── Step bar ───────────────────────────────────────────── */
-.step-active { color: var(--color-gold); }
-.step-done   { color: var(--color-gold-mid); }
-.step-todo   { color: var(--color-border); }
+/* ─── Skeleton shimmer ───────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #202020 25%,
+    #2a2a2a 50%,
+    #202020 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease infinite;
+}
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
 
-/* ─── Label styles ───────────────────────────────────────── */
+/* ─── Gold shimmer text ──────────────────────────────────────── */
+@keyframes goldShimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    #9a7028 0%,
+    #e6c364 40%,
+    #fdf0c2 50%,
+    #e6c364 60%,
+    #9a7028 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: goldShimmer 4s linear infinite;
+}
+
+/* ─── Accordion body ─────────────────────────────────────────── */
+.acc-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+.acc-body.open { max-height: 600px; }
+
+/* ─── Label styles ───────────────────────────────────────────── */
 .label-ornate, .label-minimal, .label-script, .label-mono {
   display: flex;
   flex-direction: column;
@@ -162,81 +276,25 @@ body {
   border-radius: 4px;
 }
 .label-ornate.sel, .label-minimal.sel, .label-script.sel, .label-mono.sel {
-  border-color: var(--color-gold-mid);
-  background: rgba(198, 150, 63, 0.1);
+  border-color: #c9a84c;
+  background: rgba(201, 168, 76, 0.1);
 }
 
-/* ─── Toast ──────────────────────────────────────────────── */
-@keyframes toastIn {
-  from { opacity: 0; transform: translateX(28px); }
-  to   { opacity: 1; transform: translateX(0); }
+/* ─── Swatch ─────────────────────────────────────────────────── */
+.swatch {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
-@keyframes toastOut {
-  from { opacity: 1; transform: translateX(0); }
-  to   { opacity: 0; transform: translateX(28px); }
-}
-
-/* ─── Skeleton shimmer ───────────────────────────────────── */
-.skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--color-bg-card) 25%,
-    var(--color-bg-high) 50%,
-    var(--color-bg-card) 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.6s ease infinite;
-}
-@keyframes shimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+.swatch.active {
+  border-color: #e6c364;
+  box-shadow: 0 0 12px rgba(230, 195, 100, 0.45);
 }
 
-/* ─── Gold shimmer text ──────────────────────────────────── */
-@keyframes goldShimmer {
-  0%   { background-position: -200% center; }
-  100% { background-position:  200% center; }
-}
-.text-shimmer {
-  background: linear-gradient(
-    90deg,
-    var(--color-gold-dim) 0%,
-    var(--color-gold) 40%,
-    var(--color-cream) 50%,
-    var(--color-gold) 60%,
-    var(--color-gold-dim) 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: goldShimmer 4s linear infinite;
-}
-
-/* ─── Card hover glow ────────────────────────────────────── */
-.card-hover {
-  transition: box-shadow 0.4s ease, transform 0.4s ease;
-}
-.card-hover:hover {
-  box-shadow: 0 8px 40px rgba(198, 150, 63, 0.09);
-  transform: translateY(-3px);
-}
-
-/* ─── Ornament divider ───────────────────────────────────── */
-.ornament-divider {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-.ornament-divider::before,
-.ornament-divider::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--color-border), transparent);
-}
-
-/* ─── Candle flame ───────────────────────────────────────── */
+/* ─── Candle flame ───────────────────────────────────────────── */
 @keyframes flicker {
   0%, 100% { opacity: 1; transform: scaleY(1) translateX(0); }
   25%       { opacity: 0.9; transform: scaleY(1.04) translateX(1px); }
@@ -248,13 +306,16 @@ body {
   transform-origin: center bottom;
 }
 
-/* ─── Candle preview ─────────────────────────────────────── */
-.candle-body { transition: background 0.4s, fill 0.4s; }
-
-/* ─── Accordion body ─────────────────────────────────────── */
-.acc-body {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease;
+/* ─── Ornament divider ───────────────────────────────────────── */
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
-.acc-body.open { max-height: 600px; }
+.ornament-divider::before,
+.ornament-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #4d4637, transparent);
+}

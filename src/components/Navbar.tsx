@@ -1,175 +1,122 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { ShoppingBag, Menu, X, Search } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-import { products } from "@/data/products";
 
-const navLinks = [
+const desktopLinks = [
+  { href: "/shop", label: "Shop" },
+  { href: "/about", label: "About" },
+  { href: "/customize", label: "Customize" },
+];
+
+const mobileMenuLinks = [
   { href: "/", label: "Home" },
   { href: "/shop", label: "Shop" },
-  { href: "/customize", label: "Customize", icon: "✦" },
   { href: "/about", label: "About" },
+  { href: "/customize", label: "Customize" },
   { href: "/contact", label: "Contact" },
 ];
 
 export default function Navbar() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const searchRef = useRef<HTMLDivElement>(null);
-  const searchInputRef = useRef<HTMLInputElement>(null);
-  const { totalItems, setIsCartOpen } = useCart();
   const pathname = usePathname();
+  const { totalItems, setIsCartOpen } = useCart();
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
-  // Scroll shadow
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close search on outside click
   useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
-        setIsSearchOpen(false);
-        setSearchQuery("");
-      }
-    }
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, []);
-
-  // Focus input when search opens
-  useEffect(() => {
-    if (isSearchOpen) searchInputRef.current?.focus();
-  }, [isSearchOpen]);
-
-  // Close mobile menu on route change
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
+    setMenuOpen(false);
   }, [pathname]);
 
-  const filteredProducts = searchQuery.length > 1
-    ? products.filter(
-        (p) =>
-          p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          p.scentNotes.some((n) => n.toLowerCase().includes(searchQuery.toLowerCase())) ||
-          p.category.toLowerCase().includes(searchQuery.toLowerCase())
-      ).slice(0, 5)
-    : [];
+  // Lock body scroll when menu is open
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [menuOpen]);
 
   return (
     <>
+      {/* ── Top Fixed Header ─────────────────────────────────── */}
       <header
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 h-16 flex items-center transition-all duration-[700ms] ${
           scrolled
-            ? "glass shadow-[0_1px_30px_rgba(0,0,0,0.4)]"
-            : "bg-[var(--color-bg-deep)]/80 backdrop-blur-md"
-        }`}
+            ? "backdrop-blur-md bg-[#131313]/90 shadow-[0px_4px_20px_rgba(0,0,0,0.4)]"
+            : "bg-[#131313]"
+        } border-b border-[#4d4637]/20`}
       >
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          {/* Mobile hamburger */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="text-[var(--color-gold-mid)] hover:text-[var(--color-gold)] transition-colors lg:hidden"
-            aria-label="Open menu"
-          >
-            <Menu className="w-6 h-6" />
-          </button>
+        <div className="w-full max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between">
 
-          {/* Logo */}
-          <Link href="/" className="hover:opacity-85 transition-opacity">
-            <Image src="/kanti-logo.svg" alt="Kanti Candles" width={72} height={40} priority />
+          {/* LEFT — hamburger (mobile) or nav links (desktop) */}
+          <div className="flex items-center gap-6">
+            {/* Mobile hamburger */}
+            <button
+              onClick={() => setMenuOpen(true)}
+              className="md:hidden flex flex-col gap-[5px] w-6 h-6 justify-center"
+              aria-label="Open menu"
+            >
+              <span className="block w-full h-[1px] bg-[#cac5be]" />
+              <span className="block w-4 h-[1px] bg-[#cac5be]" />
+              <span className="block w-full h-[1px] bg-[#cac5be]" />
+            </button>
+
+            {/* Desktop nav links */}
+            <nav className="hidden md:flex items-center gap-8">
+              {desktopLinks.map(({ href, label }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className={`text-[10px] uppercase tracking-[0.2em] transition-colors duration-300 ${
+                    isActive(href)
+                      ? "text-[#e6c364]"
+                      : "text-[#cac5be] hover:text-[#e6c364]"
+                  }`}
+                >
+                  {label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          {/* CENTER — Logo */}
+          <Link href="/" className="absolute left-1/2 -translate-x-1/2 hover:opacity-80 transition-opacity duration-300">
+            <Image
+              src="/kanti-logo.svg"
+              alt="Kanti Candles"
+              width={80}
+              height={32}
+              className="h-8 w-auto"
+              priority
+            />
           </Link>
 
-          {/* Desktop nav */}
-          <nav className="hidden lg:flex items-center gap-8">
-            {navLinks.map(({ href, label, icon }) => (
-              <Link
-                key={href}
-                href={href}
-                className={`relative font-sans text-[10px] uppercase tracking-[0.22em] transition-colors group ${
-                  isActive(href)
-                    ? "text-[var(--color-gold)]"
-                    : "text-[var(--color-gold-mid)]/60 hover:text-[var(--color-gold)]"
-                }`}
-              >
-                {icon && <span className="mr-1.5 text-[var(--color-gold)]">{icon}</span>}
-                {label}
-                {/* Active underline */}
-                <span
-                  className={`absolute -bottom-1 left-0 h-px bg-[var(--color-gold)] transition-all duration-300 ${
-                    isActive(href) ? "w-full opacity-50" : "w-0 group-hover:w-full opacity-30"
-                  }`}
-                />
-              </Link>
-            ))}
-          </nav>
-
-          {/* Right actions */}
+          {/* RIGHT — search + cart */}
           <div className="flex items-center gap-4">
-            {/* Search */}
-            <div ref={searchRef} className="relative">
-              <button
-                onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="text-[var(--color-gold-mid)] hover:text-[var(--color-gold)] transition-colors"
-                aria-label="Search"
-              >
-                <Search className="w-5 h-5" />
-              </button>
-              {isSearchOpen && (
-                <div className="absolute top-10 right-0 w-72 bg-[var(--color-bg-deep)] border border-[var(--color-border)]/30 rounded-sm shadow-2xl animate-[fadeUp_0.2s_ease]">
-                  <input
-                    ref={searchInputRef}
-                    type="text"
-                    placeholder="Search candles..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-transparent px-4 py-3 font-sans text-sm text-[var(--color-muted)] placeholder:text-[var(--color-faint)]/50 focus:outline-none border-b border-[var(--color-border)]/20"
-                  />
-                  {filteredProducts.length > 0 && (
-                    <div className="py-2">
-                      {filteredProducts.map((p) => (
-                        <Link
-                          key={p.slug}
-                          href={`/shop/${p.slug}`}
-                          onClick={() => { setIsSearchOpen(false); setSearchQuery(""); }}
-                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-[var(--color-bg-card)] transition-colors"
-                        >
-                          <img src={p.imageUrl} alt={p.name} className="w-10 h-10 rounded-sm object-cover shrink-0" />
-                          <div className="min-w-0">
-                            <p className="font-sans text-sm text-[var(--color-muted)] truncate">{p.name}</p>
-                            <p className="font-sans text-[10px] text-[var(--color-faint)]">{p.scentNotes.join(" · ")}</p>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                  {searchQuery.length > 1 && filteredProducts.length === 0 && (
-                    <p className="px-4 py-3 font-sans text-sm text-[var(--color-faint)]/60">No results found</p>
-                  )}
-                </div>
-              )}
-            </div>
+            <button
+              className="text-[#cac5be] hover:text-[#e6c364] transition-colors duration-300"
+              aria-label="Search"
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>search</span>
+            </button>
 
-            {/* Cart */}
             <button
               onClick={() => setIsCartOpen(true)}
-              className="relative text-[var(--color-gold-mid)] hover:text-[var(--color-gold)] transition-colors"
+              className="relative text-[#cac5be] hover:text-[#e6c364] transition-colors duration-300"
               aria-label="Open cart"
             >
-              <ShoppingBag className="w-5 h-5" />
+              <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>shopping_bag</span>
               {totalItems > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-[var(--color-gold)] text-[var(--color-bg-deep)] text-[8px] font-bold flex items-center justify-center">
+                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-[#e6c364] text-[#1c1a0d] text-[8px] font-bold flex items-center justify-center">
                   {totalItems > 9 ? "9+" : totalItems}
                 </span>
               )}
@@ -178,48 +125,65 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* Mobile menu overlay */}
+      {/* ── Mobile Full-Screen Menu ──────────────────────────── */}
       <div
-        className={`fixed inset-0 z-[60] bg-black/60 transition-opacity duration-300 ${
-          isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
-        onClick={() => setIsMobileMenuOpen(false)}
-      />
-
-      {/* Mobile menu drawer */}
-      <div
-        className={`fixed inset-y-0 left-0 z-[70] w-72 bg-[var(--color-bg-deep)] flex flex-col p-8 gap-1 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed inset-0 z-[70] bg-[#0d0d0d]/95 backdrop-blur-xl flex flex-col transition-all duration-[700ms] ${
+          menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
       >
-        <div className="flex items-center justify-between mb-8">
-          <Image src="/kanti-logo.svg" alt="Kanti Candles" width={80} height={45} />
+        {/* Close button */}
+        <div className="flex justify-between items-center px-6 py-5 border-b border-[#4d4637]/20">
+          <Image src="/kanti-logo.svg" alt="Kanti Candles" width={80} height={32} className="h-8 w-auto" />
           <button
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="text-[var(--color-faint)] hover:text-[var(--color-gold)] transition-colors"
+            onClick={() => setMenuOpen(false)}
+            className="text-[#6e6754] hover:text-[#e6c364] transition-colors duration-300"
+            aria-label="Close menu"
           >
-            <X className="w-5 h-5" />
+            <span className="material-symbols-outlined" style={{ fontSize: "24px" }}>close</span>
           </button>
         </div>
 
-        {navLinks.map(({ href, label, icon }) => (
-          <Link
-            key={href}
-            href={href}
-            className={`flex items-center gap-2 font-sans text-xs uppercase tracking-widest py-4 border-b border-[var(--color-border)]/20 transition-colors ${
-              isActive(href)
-                ? "text-[var(--color-gold)]"
-                : "text-[var(--color-muted)] hover:text-[var(--color-gold)]"
-            }`}
-          >
-            {icon && <span className="text-[var(--color-gold)]">{icon}</span>}
-            {label}
-            {isActive(href) && (
-              <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[var(--color-gold)]" />
-            )}
-          </Link>
-        ))}
+        {/* Nav links */}
+        <nav className="flex flex-col px-8 pt-8 gap-0">
+          {mobileMenuLinks.map(({ href, label }) => (
+            <Link
+              key={href}
+              href={href}
+              className={`serif-italic text-2xl py-4 border-b border-[#4d4637]/20 transition-colors duration-300 ${
+                isActive(href) ? "text-[#e6c364]" : "text-[#e5e2e1] hover:text-[#e6c364]"
+              }`}
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
       </div>
+
+      {/* ── Mobile Bottom Nav (hidden on md+) ───────────────── */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 h-20 bg-[#131313]/90 backdrop-blur-md border-t border-[#4d4637]/20 shadow-[0px_-10px_30px_rgba(0,0,0,0.5)] bottom-nav-safe flex items-center justify-around px-2">
+        {[
+          { href: "/", icon: "home", label: "Home" },
+          { href: "/shop", icon: "shopping_bag", label: "Shop" },
+          { href: "/quiz", icon: "psychology_alt", label: "Scent" },
+          { href: "/about", icon: "person", label: "Profile" },
+        ].map(({ href, icon, label }) => {
+          const active = isActive(href);
+          return (
+            <Link
+              key={href}
+              href={href}
+              className={`flex flex-col items-center gap-1 px-3 transition-colors duration-300 ${
+                active
+                  ? "text-[#e6c364] drop-shadow-[0_0_8px_rgba(230,195,100,0.4)]"
+                  : "text-[#6e6754]"
+              }`}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: "22px" }}>{icon}</span>
+              <span className="text-[9px] uppercase tracking-[0.15em]">{label}</span>
+            </Link>
+          );
+        })}
+      </nav>
     </>
   );
 }

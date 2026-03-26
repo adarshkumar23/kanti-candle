@@ -2,245 +2,348 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { getFeaturedProducts } from "@/data/products";
-import { useCart } from "@/context/CartContext";
-import { useToast } from "@/context/ToastContext";
-import { useRevealAnimation } from "@/hooks/useRevealAnimation";
-import { Star } from "lucide-react";
+import { products } from "@/data/products";
 
-const testimonials = [
-  {
-    quote: "The Noir has completely transformed my evening routine. The scent fills the room within minutes and lingers beautifully.",
-    name: "Priya Sharma",
-    location: "Mumbai",
-    rating: 5,
-  },
-  {
-    quote: "I gifted the Sacred Sandalwood to my mother and she was in tears. It reminded her of home. Kanti understands fragrance on a soul level.",
-    name: "Arjun Mehta",
-    location: "Delhi",
-    rating: 5,
-  },
-  {
-    quote: "The customizer tool is incredible — I designed a candle for my wedding favours and every guest asked where I got them.",
-    name: "Ananya Reddy",
-    location: "Hyderabad",
-    rating: 5,
-  },
-];
+const featuredProducts = products.slice(0, 2);
 
 export default function Home() {
   const [email, setEmail] = useState("");
-  const [emailSubmitted, setEmailSubmitted] = useState(false);
-  const featured = getFeaturedProducts(3);
-  const { addItem, setIsCartOpen } = useCart();
-  const { addToast } = useToast();
-  useRevealAnimation();
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
+  const handleNewsletter = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !email.includes("@")) {
-      addToast("Please enter a valid email address", "error");
-      return;
-    }
-    setEmailSubmitted(true);
-    addToast("Welcome to the inner circle! You\u2019ll hear from us soon.", "success");
+    if (!email || !email.includes("@")) return;
+    setSubmitted(true);
     setEmail("");
-    setTimeout(() => setEmailSubmitted(false), 4000);
-  };
-
-  const handleQuickAdd = (p: typeof featured[0]) => {
-    const defaultSize = p.sizes[1] || p.sizes[0];
-    addItem({
-      slug: p.slug,
-      name: p.name,
-      size: defaultSize.weight,
-      price: defaultSize.price,
-      imageUrl: p.imageUrl,
-    });
-    addToast(`${p.name} added to cart`);
-    setIsCartOpen(true);
+    setTimeout(() => setSubmitted(false), 4000);
   };
 
   return (
     <div>
-      {/* HERO */}
-      <section className="relative h-screen w-full flex items-end justify-start overflow-hidden">
-        <div className="absolute inset-0">
-          <img
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKfh5G09V5s_veL5tO4Kb9QWyv7h5fm79XLAwMPQ0rJxkTdG8fNzV4Jy_lr4jfN8SHlC8eqcu055ZVwf_DsaWdy-5LoIFzHOHJ2J2ii1cO31R_ntGHOsQnKBVaFPRkwePl_XSs_mAwx4wcF9QayPwqUrPMKj7yJiVBZdJ-APCIRbsypNxnw9GMxonXmvJc7uv5GxcxDC5JSdCAkDOLToCtKCVgkOQnpFtxL2G6cTDkhcd90yujwxbTh5uDrbaLUpwDQpQdy2fkbAU"
-            alt="Hero candle"
-            className="w-full h-full object-cover brightness-[0.38]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-bg)]/80 via-[var(--color-bg)]/30 to-transparent"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg)] via-transparent to-transparent"></div>
-        </div>
-        <div className="relative z-10 px-8 md:px-16 lg:px-24 pb-24 max-w-3xl">
-          <p className="font-accent italic text-[var(--color-gold)] text-lg tracking-widest mb-5 opacity-90">Luxury you can afford. Scents you won&apos;t forget.</p>
-          <h1 className="font-display text-7xl md:text-8xl lg:text-[7rem] font-light leading-[0.92] tracking-tight mb-8">
-            Set the<br /><span className="italic text-[var(--color-gold-mid)]">Mood.</span>
-          </h1>
-          <p className="font-sans text-[var(--color-muted)] font-light text-lg mb-10 leading-relaxed max-w-lg">
-            Hand-poured in Gurgaon with premium fragrance oils and natural wax. From ₹1,350 — because every home deserves to smell extraordinary.
+      {/* ── SECTION 1: Hero ─────────────────────────────────── */}
+      <section
+        className="min-h-screen relative overflow-hidden flex flex-col items-center justify-center text-center px-4"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 60%, rgba(201,168,76,0.08) 0%, transparent 70%), #131313",
+        }}
+      >
+        {/* Subtle candle glow orb */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            bottom: "20%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "320px",
+            height: "320px",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%)",
+            filter: "blur(40px)",
+          }}
+        />
+
+        <div className="relative z-10 flex flex-col items-center">
+          <p className="text-[10px] uppercase tracking-[0.3em] text-[#cac5be] mb-6">
+            Artisanal Candles
           </p>
-          <div className="flex flex-wrap gap-4">
-            <Link href="/shop" className="btn-gold px-10 py-4 font-sans text-xs uppercase tracking-[0.22em] font-semibold rounded-sm">Shop Candles</Link>
-            <Link href="/customize" className="btn-outline px-10 py-4 font-sans text-xs uppercase tracking-[0.22em] font-semibold rounded-sm flex items-center gap-2">
-              <span className="text-[var(--color-gold)]">✦</span> Build Your Own
-            </Link>
-          </div>
+          <h1
+            className="serif-italic nocturnal-glow"
+            style={{
+              fontFamily: '"Cormorant Garamond", serif',
+              fontStyle: "italic",
+              fontSize: "clamp(3.5rem, 10vw, 7rem)",
+              fontWeight: 400,
+              lineHeight: 1,
+              color: "#e5e2e1",
+            }}
+          >
+            Set the Mood.
+          </h1>
+          <p className="text-[11px] uppercase tracking-[0.25em] text-[#cac5be] mt-6 max-w-xs">
+            Artisanal scents, hand-poured in Gurgaon
+          </p>
+          <p className="text-sm text-[#e6c364] mt-2">From ₹1,350</p>
+          <Link
+            href="/shop"
+            className="btn-gold px-10 py-4 text-[10px] uppercase tracking-[0.2em] rounded-sm mt-8 inline-block"
+          >
+            Explore Collection
+          </Link>
         </div>
-        <div className="absolute bottom-8 right-8 z-10 flex flex-col items-center gap-2 opacity-40">
-          <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-muted)] rotate-90 mb-3">Scroll</span>
-          <div className="w-px h-12 bg-[var(--color-gold-mid)]/50"></div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
+          <span className="material-symbols-outlined text-[#cac5be] animate-bounce" style={{ fontSize: "18px" }}>
+            keyboard_arrow_down
+          </span>
         </div>
       </section>
 
-      {/* MARQUEE STRIP */}
-      <div className="py-8 border-y border-[var(--color-border)]/20 bg-[var(--color-bg-deep)] overflow-hidden">
-        <div className="marquee-inner flex gap-14 shrink-0">
-          <span className="flex items-center gap-14 shrink-0">
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Free Shipping ₹2000+</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">80–100 Hr Burn Time</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">100% Natural Wax</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Hand-Poured in Gurgaon</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Gift-Ready Packaging</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-          </span>
-          <span className="flex items-center gap-14 shrink-0" aria-hidden="true">
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Free Shipping ₹2000+</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">80–100 Hr Burn Time</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">100% Natural Wax</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Hand-Poured in Gurgaon</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Gift-Ready Packaging</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-          </span>
+      {/* ── SECTION 2: Marquee Strip ────────────────────────── */}
+      <div className="bg-[#1c1c1c] py-3 overflow-hidden">
+        <div className="marquee-track">
+          {/* Duplicated for seamless loop */}
+          {[0, 1].map((dupe) => (
+            <span key={dupe} className="flex items-center shrink-0" aria-hidden={dupe === 1}>
+              {[
+                "Free Shipping Above ₹999",
+                "80–100 Hour Burn",
+                "Gift Packaging Available",
+                "Hand-Poured in Gurgaon",
+                "Premium Soy Wax",
+              ].map((text, i) => (
+                <span key={i} className="flex items-center">
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#6e6754] px-4">
+                    {text}
+                  </span>
+                  <span className="text-[#e6c364] text-xs">✦</span>
+                </span>
+              ))}
+            </span>
+          ))}
         </div>
       </div>
 
-      {/* FEATURED PRODUCTS */}
-      <section className="py-28 px-6 md:px-12 lg:px-24 reveal">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-6">
-            <div>
-              <p className="font-sans text-[10px] uppercase tracking-[0.35em] text-[var(--color-gold-mid)] mb-3">India&apos;s Favourite Candle Studio</p>
-              <h2 className="font-display text-5xl md:text-6xl font-light">Bestselling Scents</h2>
-            </div>
-            <Link href="/shop" className="font-sans text-[10px] uppercase tracking-widest text-[var(--color-gold)] border-b border-[var(--color-gold)]/25 pb-1 hover:border-[var(--color-gold)] transition-colors shrink-0">View All Candles →</Link>
+      {/* ── SECTION 3: Handcrafted Signatures ───────────────── */}
+      <section className="bg-[#1c1c1c] py-24 px-4 md:px-8 lg:px-16">
+        <div className="max-w-5xl mx-auto">
+          {/* Header */}
+          <div className="mb-12">
+            <h2
+              className="serif-italic text-3xl"
+              style={{ fontFamily: '"Cormorant Garamond", serif', fontStyle: "italic" }}
+            >
+              Handcrafted Signatures
+            </h2>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-[#6e6754] mt-2">
+              Each vessel tells a story
+            </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16">
-            {featured.map((p, i) => (
-              <div key={p.slug} className={`group cursor-pointer ${i === 1 ? "md:mt-20" : ""}`}>
-                <Link href={`/shop/${p.slug}`}>
-                  <div className="aspect-[3/4] overflow-hidden rounded-sm mb-7 bg-[var(--color-bg-card)] relative">
-                    <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                    <div className="quick-buy absolute inset-0 bg-[var(--color-bg)]/50 flex items-center justify-center rounded-sm">
-                      <button
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleQuickAdd(p); }}
-                        className="btn-gold px-7 py-3 text-[9px] font-bold uppercase tracking-widest rounded-full"
-                      >
-                        Quick Add
-                      </button>
-                    </div>
-                  </div>
-                </Link>
-                <Link href={`/shop/${p.slug}`}>
-                  <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-gold)]/50 mb-2 font-semibold">{p.series}</p>
-                  <h3 className="font-display text-3xl mb-2 group-hover:text-[var(--color-gold)] transition-colors">{p.name}</h3>
-                  <p className="font-sans text-[var(--color-faint)] text-sm leading-relaxed">{p.scentNotes.join(" · ")}</p>
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* STORY SECTION */}
-      <section className="flex flex-col md:flex-row min-h-[580px] reveal">
-        <div className="w-full md:w-1/2 overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=800&q=80" alt="Artisan" className="w-full h-full object-cover" style={{ minHeight: "400px" }} />
-        </div>
-        <div className="w-full md:w-1/2 bg-[var(--color-bg-low)] flex flex-col justify-center p-10 lg:p-20 gap-7">
-          <span className="font-accent italic text-[var(--color-gold)] text-xl">Made with intention. Priced with heart.</span>
-          <h2 className="font-display text-5xl md:text-6xl leading-tight font-light">Why settle for<br />ordinary<br />when you can burn<br /><span className="italic text-[var(--color-gold-mid)]">extraordinary?</span></h2>
-          <p className="font-sans text-[var(--color-muted)] font-light leading-relaxed max-w-md">
-            Born in Gurgaon, Kanti was built on one belief: premium fragrance should be accessible to everyone. Each candle is hand-poured in small batches, tested for scent throw, and packaged to gift — at a price that actually makes sense.
-          </p>
-          <Link href="/about" className="btn-gold w-fit px-8 py-4 font-sans text-xs uppercase tracking-[0.22em] font-semibold rounded-sm">Our Story</Link>
-        </div>
-      </section>
-
-      {/* TESTIMONIALS */}
-      <section className="py-28 px-6 md:px-12 lg:px-24 bg-[var(--color-bg-deep)] reveal">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="font-sans text-[10px] uppercase tracking-[0.4em] text-[var(--color-gold-mid)] mb-3">2,000+ Happy Homes</p>
-            <h2 className="font-display text-5xl md:text-6xl font-light">People Are Talking</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((t, i) => (
-              <div
-                key={i}
-                className="bg-[var(--color-bg-low)] p-8 rounded-sm border border-[var(--color-border)]/15 flex flex-col gap-5 card-hover"
+          {/* 2-col asymmetric product grid */}
+          <div className="grid grid-cols-2 gap-4 md:gap-8">
+            {featuredProducts.map((p, i) => (
+              <Link
+                key={p.slug}
+                href={`/shop/${p.slug}`}
+                className={`group relative card-hover ${i === 1 ? "mt-8" : ""}`}
               >
-                <div className="flex gap-1">
-                  {Array.from({ length: t.rating }).map((_, j) => (
-                    <Star key={j} className="w-4 h-4 fill-[var(--color-gold)] text-[var(--color-gold)]" />
-                  ))}
+                <div className="aspect-[3/4] relative overflow-hidden rounded-sm bg-[#202020]">
+                  <img
+                    src={p.imageUrl}
+                    alt={p.name}
+                    className="w-full h-full object-cover transition-transform duration-[700ms] group-hover:scale-105"
+                  />
+                  {/* Glass chip at bottom */}
+                  <div className="glass-note absolute bottom-3 left-3 right-3 rounded-sm px-3 py-2">
+                    <p className="text-[9px] uppercase tracking-[0.15em] text-[#c9a675]">
+                      {p.scentNotes.join(" · ")}
+                    </p>
+                  </div>
                 </div>
-                <p className="font-accent italic text-[var(--color-muted)] text-lg leading-relaxed flex-1">
-                  &ldquo;{t.quote}&rdquo;
-                </p>
-                <div>
-                  <p className="font-sans text-sm text-[var(--color-cream)] font-medium">{t.name}</p>
-                  <p className="font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]">{t.location}</p>
+                <div className="mt-3">
+                  <p
+                    className="serif-italic text-lg text-[#e5e2e1] group-hover:text-[#e6c364] transition-colors duration-300"
+                    style={{ fontFamily: '"Cormorant Garamond", serif', fontStyle: "italic" }}
+                  >
+                    {p.name}
+                  </p>
+                  <p className="text-sm text-[#e6c364] mt-1">
+                    From ₹{p.sizes[0].price.toLocaleString("en-IN")}
+                  </p>
                 </div>
-              </div>
+              </Link>
             ))}
+          </div>
+
+          <div className="mt-10 text-center">
+            <Link
+              href="/shop"
+              className="text-[10px] uppercase tracking-[0.2em] text-[#e6c364] border-b border-[#e6c364]/25 pb-1 hover:border-[#e6c364] transition-colors"
+            >
+              View All Candles →
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* CUSTOMIZE TEASER */}
-      <section className="relative py-32 px-6 overflow-hidden bg-[var(--color-bg)] text-center reveal">
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 60% 50% at 50% 60%, rgba(198,150,63,.12) 0%, transparent 70%)" }}></div>
-        <div className="relative z-10 max-w-3xl mx-auto space-y-8">
-          <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-[var(--color-gold-mid)]">The Kanti Custom Studio</span>
-          <h2 className="font-display text-6xl md:text-7xl italic font-light">A Candle Only<br />You Could Make</h2>
-          <p className="font-sans text-[var(--color-muted)] font-light text-lg leading-relaxed max-w-xl mx-auto">
-            Pick your fragrance, choose your vessel, and let AI design a label that&apos;s entirely you. Perfect for gifts, weddings, or just treating yourself the right way.
+      {/* ── SECTION 4: Mood Pairing ──────────────────────────── */}
+      <section className="bg-[#131313] py-24 px-4 md:px-8 lg:px-16">
+        <div className="max-w-5xl mx-auto">
+          <div className="mb-10">
+            <h2
+              className="serif-italic text-3xl"
+              style={{ fontFamily: '"Cormorant Garamond", serif', fontStyle: "italic" }}
+            >
+              Mood Pairings
+            </h2>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-[#6e6754] mt-2">
+              Find your perfect match
+            </p>
+          </div>
+
+          <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-2">
+            {/* Cozy */}
+            <div className="group w-64 min-w-[256px] aspect-square relative overflow-hidden rounded-sm shrink-0 cursor-pointer">
+              <div
+                className="absolute inset-0 transition-transform duration-[700ms] group-hover:scale-110"
+                style={{
+                  background:
+                    "radial-gradient(ellipse at center, rgba(201,100,50,0.5) 0%, rgba(30,15,5,0.9) 100%)",
+                }}
+              />
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+                <span className="material-symbols-outlined text-[#e6c364]" style={{ fontSize: "36px" }}>
+                  fireplace
+                </span>
+                <p
+                  className="serif-italic text-2xl text-[#e5e2e1]"
+                  style={{ fontFamily: '"Cormorant Garamond", serif', fontStyle: "italic" }}
+                >
+                  Cozy
+                </p>
+                <p className="text-[9px] uppercase tracking-[0.15em] text-[#cac5be]/60">
+                  Warm & Inviting
+                </p>
+              </div>
+            </div>
+
+            {/* Romantic */}
+            <div className="group w-64 min-w-[256px] aspect-square relative overflow-hidden rounded-sm shrink-0 cursor-pointer">
+              <div
+                className="absolute inset-0 transition-transform duration-[700ms] group-hover:scale-110"
+                style={{
+                  background:
+                    "radial-gradient(ellipse at center, rgba(150,30,60,0.6) 0%, rgba(20,5,10,0.95) 100%)",
+                }}
+              />
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+                <span className="material-symbols-outlined text-[#e6c364]" style={{ fontSize: "36px" }}>
+                  favorite
+                </span>
+                <p
+                  className="serif-italic text-2xl text-[#e5e2e1]"
+                  style={{ fontFamily: '"Cormorant Garamond", serif', fontStyle: "italic" }}
+                >
+                  Romantic
+                </p>
+                <p className="text-[9px] uppercase tracking-[0.15em] text-[#cac5be]/60">
+                  Deep & Sensual
+                </p>
+              </div>
+            </div>
+
+            {/* Focused */}
+            <div className="group w-64 min-w-[256px] aspect-square relative overflow-hidden rounded-sm shrink-0 cursor-pointer">
+              <div
+                className="absolute inset-0 transition-transform duration-[700ms] group-hover:scale-110"
+                style={{
+                  background:
+                    "radial-gradient(ellipse at center, rgba(40,70,90,0.6) 0%, rgba(5,10,15,0.95) 100%)",
+                }}
+              />
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+                <span className="material-symbols-outlined text-[#e6c364]" style={{ fontSize: "36px" }}>
+                  self_improvement
+                </span>
+                <p
+                  className="serif-italic text-2xl text-[#e5e2e1]"
+                  style={{ fontFamily: '"Cormorant Garamond", serif', fontStyle: "italic" }}
+                >
+                  Focused
+                </p>
+                <p className="text-[9px] uppercase tracking-[0.15em] text-[#cac5be]/60">
+                  Clear & Grounded
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── SECTION 5: Story ─────────────────────────────────── */}
+      <section className="bg-[#0d0d0d] py-32 px-4 md:px-8 text-center">
+        <div className="max-w-xl mx-auto">
+          <p
+            className="serif-italic text-2xl md:text-4xl text-[#e5e2e1] leading-snug"
+            style={{ fontFamily: '"Cormorant Garamond", serif', fontStyle: "italic" }}
+          >
+            Born from a belief that every space deserves a soul.
           </p>
-          <Link href="/customize" className="btn-outline px-14 py-5 font-sans text-xs uppercase tracking-[0.3em] font-semibold rounded-sm flex items-center justify-center gap-3 mx-auto w-fit">
-            <span className="text-[var(--color-gold)] text-base">✦</span> Design Your Candle
+          <div className="w-12 h-[1px] bg-[#4d4637] mx-auto my-8" />
+          <blockquote
+            className="border-l border-[#c9a84c]/30 pl-6 text-left max-w-sm mx-auto"
+          >
+            <p
+              className="serif-italic text-[#cac5be] text-base leading-relaxed"
+              style={{ fontFamily: '"Cormorant Garamond", serif', fontStyle: "italic" }}
+            >
+              We hand-pour every candle in small batches in Gurgaon, obsessing over each note, each vessel, each flame. Because a candle isn&apos;t just wax — it&apos;s memory, atmosphere, intention.
+            </p>
+          </blockquote>
+          <Link
+            href="/about"
+            className="mt-10 inline-block text-[10px] uppercase tracking-[0.2em] text-[#e6c364] border-b border-[#e6c364]/25 pb-1 hover:border-[#e6c364] transition-colors"
+          >
+            Our Story →
           </Link>
         </div>
       </section>
 
-      {/* EMAIL SIGNUP */}
-      <section className="py-24 px-6 md:px-12 lg:px-24 reveal">
-        <div className="max-w-5xl mx-auto bg-[var(--color-cream)] p-12 md:p-20 rounded-sm relative overflow-hidden text-center" style={{ border: "4px solid rgba(198,150,63,.2)" }}>
-          <div className="absolute top-0 right-0 w-56 h-56 rounded-full -translate-y-1/2 translate-x-1/2" style={{ background: "rgba(198,150,63,.06)" }}></div>
-          <div className="relative z-10 space-y-7">
-            <span className="font-accent italic text-[var(--color-gold-mid)] text-xl">10% off your first order</span>
-            <h2 className="font-display text-5xl md:text-6xl text-[var(--color-bg)] font-light">Get Your Welcome Gift</h2>
-            <p className="font-sans text-[var(--color-bg)]/60 font-light max-w-md mx-auto leading-relaxed">
-              Subscribe and receive an exclusive discount code instantly — plus early access to seasonal drops and members-only offers.
-            </p>
-            <form onSubmit={handleNewsletterSubmit} className="max-w-md mx-auto flex flex-col md:flex-row gap-4">
-              <input
-                type="email"
-                placeholder="Enter your email for 10% off"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="flex-grow bg-transparent border-b-2 border-[var(--color-bg)]/20 focus:border-[var(--color-gold-mid)] focus:outline-none text-[var(--color-bg)] placeholder:text-[var(--color-bg)]/40 font-light py-3 text-sm"
-              />
-              <button
-                type="submit"
-                disabled={emailSubmitted}
-                className="bg-[var(--color-bg)] text-[var(--color-gold)] px-8 py-3 font-sans text-xs uppercase tracking-widest font-semibold rounded-sm hover:bg-[var(--color-bg-high)] transition-colors disabled:opacity-50"
-              >
-                {emailSubmitted ? "Check Your Inbox ✓" : "Claim 10% Off"}
-              </button>
-            </form>
-          </div>
+      {/* ── SECTION 6: Scent Quiz CTA ───────────────────────── */}
+      <section className="px-4 md:px-6 my-24">
+        <div className="max-w-5xl mx-auto bg-[#252525] p-8 md:p-12 rounded-sm text-center">
+          <span className="material-symbols-outlined text-[#e6c364] mb-4 block" style={{ fontSize: "40px" }}>
+            psychology_alt
+          </span>
+          <h2
+            className="serif-italic text-3xl md:text-4xl text-[#e5e2e1]"
+            style={{ fontFamily: '"Cormorant Garamond", serif', fontStyle: "italic" }}
+          >
+            Find Your Essence
+          </h2>
+          <p className="text-[11px] uppercase tracking-[0.2em] text-[#6e6754] mt-3 mb-8 max-w-sm mx-auto">
+            Answer five questions. Discover the candle that was made for you.
+          </p>
+          <Link
+            href="/quiz"
+            className="btn-gold inline-block w-full md:w-auto px-12 py-4 text-[10px] uppercase tracking-[0.2em] rounded-sm"
+          >
+            Begin the Scent Quiz
+          </Link>
+        </div>
+      </section>
+
+      {/* ── SECTION 7: Newsletter ───────────────────────────── */}
+      <section className="bg-[#1c1c1c] py-24 px-4 md:px-8 text-center">
+        <div className="max-w-sm mx-auto">
+          <h2
+            className="serif-italic text-3xl text-[#e5e2e1]"
+            style={{ fontFamily: '"Cormorant Garamond", serif', fontStyle: "italic" }}
+          >
+            Join the Atelier
+          </h2>
+          <p className="text-[11px] text-[#6e6754] mt-4 mb-8 leading-relaxed">
+            Be the first to know about new collections and exclusive offers. Claim 10% off your first order.
+          </p>
+          <form onSubmit={handleNewsletter} className="flex flex-col gap-4">
+            <input
+              type="email"
+              className="input-line w-full py-3 text-sm"
+              placeholder="your@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <button
+              type="submit"
+              disabled={submitted}
+              className="btn-gold w-full py-4 text-[10px] uppercase tracking-[0.2em] rounded-sm disabled:opacity-50"
+            >
+              {submitted ? "Check your inbox ✓" : "Claim 10% Off"}
+            </button>
+          </form>
         </div>
       </section>
     </div>
