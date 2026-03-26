@@ -25,7 +25,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       return NextResponse.json({ error: 'No file received' }, { status: 400 });
     }
 
-    const blob = await put(filename, request.body, { access: 'public', token });
+    const blob = await put(filename, request.body, { access: 'public', token, addRandomSuffix: true });
 
     await prisma.galleryImage.create({ data: { url: blob.url } });
 
