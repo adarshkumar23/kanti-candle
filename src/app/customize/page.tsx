@@ -43,14 +43,16 @@ export default function Customize() {
       const data = await response.json();
       
       if (!response.ok) {
+        setIsGenerating(false);
         throw new Error(data.error || "Failed to generate image");
       }
       
+      // The browser will now fetch the URL. The isGenerating spinner remains TRUE 
+      // until the <img onLoad> sequence fires.
       setGeneratedImg(data.imageUrl);
     } catch (error: any) {
       console.error(error);
       alert(error.message);
-    } finally {
       setIsGenerating(false);
     }
   };
@@ -233,11 +235,26 @@ export default function Customize() {
             <div className="flex justify-center py-4 min-h-[280px] items-center">
               {mode === "ai" ? (
                 generatedImg ? (
-                  <img src={generatedImg} alt="AI Generated Candle" className="w-[200px] h-[280px] object-cover rounded-sm shadow-2xl border border-[var(--color-gold)]/20 animate-[fadeUp_0.8s_ease]" />
+                  <div className="relative w-[200px] h-[280px]">
+                    <img 
+                      src={generatedImg} 
+                      alt="AI Generated Candle" 
+                      className={`w-full h-full object-cover rounded-sm shadow-2xl border border-[var(--color-gold)]/20 transition-opacity duration-1000 ${isGenerating ? 'opacity-0' : 'opacity-100'}`}
+                      onLoad={() => setIsGenerating(false)}
+                      onError={() => { setIsGenerating(false); alert("Image failed to load from AI provider."); }}
+                    />
+                    {isGenerating && (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Loader2 className="w-8 h-8 animate-spin text-[var(--color-gold)]" />
+                      </div>
+                    )}
+                  </div>
                 ) : (
                   <div className="w-[200px] h-[280px] border border-dashed border-[var(--color-border)]/50 rounded-sm flex flex-col items-center justify-center gap-3 text-[var(--color-faint)]">
-                    <Sparkles className="w-8 h-8 opacity-40" />
-                    <span className="font-sans text-[9px] uppercase tracking-widest text-center px-4">Awaiting Prompt</span>
+                    {isGenerating ? <Loader2 className="w-8 h-8 animate-spin" /> : <Sparkles className="w-8 h-8 opacity-40" />}
+                    <span className="font-sans text-[9px] uppercase tracking-widest text-center px-4">
+                      {isGenerating ? "Crafting..." : "Awaiting Prompt"}
+                    </span>
                   </div>
                 )
               ) : (
