@@ -1,197 +1,365 @@
 "use client";
-
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { useState } from "react";
-import { getFeaturedProducts } from "@/data/products";
-import { useCart } from "@/context/CartContext";
-import { useToast } from "@/context/ToastContext";
-import { useRevealAnimation } from "@/hooks/useRevealAnimation";
-import { Star } from "lucide-react";
+import { ArrowRight, Star, Sparkles, Gift } from "lucide-react";
+import { products } from "@/data/products";
+import ScentQuiz from "@/components/ScentQuiz";
+import GiftingStudio from "@/components/GiftingStudio";
+import CountdownTimer from "@/components/CountdownTimer";
+import BatchCounter from "@/components/BatchCounter";
+import BurnVisualizer from "@/components/BurnVisualizer";
+import ScentRadar from "@/components/ScentRadar";
+import EmberParticles from "@/components/EmberParticles";
 
-const testimonials = [
+const FEATURED = products.slice(0, 6);
+
+const TESTIMONIALS = [
   {
-    quote: "The Noir has completely transformed my evening routine. The scent fills the room within minutes and lingers beautifully.",
-    name: "Priya Sharma",
-    location: "Mumbai",
-    rating: 5,
+    quote: "The Luxury Amber fills our entire living room. I've never experienced a candle that transports you so completely.",
+    author: "Priya M.", location: "New Delhi",
+    gradient: "from-[#2d0a1e] via-[#1a0810] to-[#0d0d0d]",
   },
   {
-    quote: "I gifted the Sacred Sandalwood to my mother and she was in tears. It reminded her of home. Kanti understands fragrance on a soul level.",
-    name: "Arjun Mehta",
-    location: "Delhi",
-    rating: 5,
+    quote: "Every batch is handcrafted and you can tell. The burn is clean, the throw is incredible. Worth every rupee.",
+    author: "Arjun K.", location: "Mumbai",
+    gradient: "from-[#0a1a2d] via-[#08101a] to-[#0d0d0d]",
   },
   {
-    quote: "The customizer tool is incredible — I designed a candle for my wedding favours and every guest asked where I got them.",
-    name: "Ananya Reddy",
-    location: "Hyderabad",
-    rating: 5,
+    quote: "I gifted Golden Saffron to my mother-in-law. She called it 'the best candle she's ever had'. Kanti is special.",
+    author: "Sneha R.", location: "Bangalore",
+    gradient: "from-[#1a1408] via-[#120e06] to-[#0d0d0d]",
   },
 ];
 
+const MOOD_BOARDS = [
+  { mood: "Cozy", icon: "🛋️", desc: "Sandalwood · Warm Vanilla · Cedar", product: "sacred-sandalwood", candle: "Sacred Sandalwood", playlist: "Lo-fi Rainy Day" },
+  { mood: "Romantic", icon: "🌹", desc: "Rose · Jasmine · Tuberose", product: "temple-bloom", candle: "Temple Bloom", playlist: "Slow Jazz Evenings" },
+  { mood: "Focused", icon: "📿", desc: "Citrus · Bergamot · Lemongrass", product: "citrus-dawn", candle: "Citrus Dawn", playlist: "Deep Focus Beats" },
+  { mood: "Festive", icon: "✨", desc: "Saffron · Amber · Rose", product: "golden-saffron", candle: "Golden Saffron", playlist: "Bollywood Classics" },
+];
+
 export default function Home() {
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [showGifting, setShowGifting] = useState(false);
+  const [activeMood, setActiveMood] = useState<number | null>(null);
   const [email, setEmail] = useState("");
-  const [emailSubmitted, setEmailSubmitted] = useState(false);
-  const featured = getFeaturedProducts(3);
-  const { addItem, setIsCartOpen } = useCart();
-  const { addToast } = useToast();
-  useRevealAnimation();
+  const [subscribed, setSubscribed] = useState(false);
+  const revealRefs = useRef<(HTMLElement | null)[]>([]);
 
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
+  // Reveal on scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { (e.target as HTMLElement).classList.add("visible"); } }),
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    );
+    revealRefs.current.forEach((el) => el && observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
+  function addRevealRef(el: HTMLElement | null) {
+    if (el && !revealRefs.current.includes(el)) revealRefs.current.push(el);
+  }
+
+  async function handleSubscribe(e: React.FormEvent) {
     e.preventDefault();
-    if (!email || !email.includes("@")) {
-      addToast("Please enter a valid email address", "error");
-      return;
-    }
-    setEmailSubmitted(true);
-    addToast("Welcome to the inner circle! You\u2019ll hear from us soon.", "success");
-    setEmail("");
-    setTimeout(() => setEmailSubmitted(false), 4000);
-  };
-
-  const handleQuickAdd = (p: typeof featured[0]) => {
-    const defaultSize = p.sizes[1] || p.sizes[0];
-    addItem({
-      slug: p.slug,
-      name: p.name,
-      size: defaultSize.weight,
-      price: defaultSize.price,
-      imageUrl: p.imageUrl,
-    });
-    addToast(`${p.name} added to cart`);
-    setIsCartOpen(true);
-  };
+    if (!email) return;
+    setSubscribed(true);
+  }
 
   return (
-    <div>
-      {/* HERO */}
-      <section className="relative h-screen w-full flex items-end justify-start overflow-hidden">
-        <div className="absolute inset-0">
-          <img
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKfh5G09V5s_veL5tO4Kb9QWyv7h5fm79XLAwMPQ0rJxkTdG8fNzV4Jy_lr4jfN8SHlC8eqcu055ZVwf_DsaWdy-5LoIFzHOHJ2J2ii1cO31R_ntGHOsQnKBVaFPRkwePl_XSs_mAwx4wcF9QayPwqUrPMKj7yJiVBZdJ-APCIRbsypNxnw9GMxonXmvJc7uv5GxcxDC5JSdCAkDOLToCtKCVgkOQnpFtxL2G6cTDkhcd90yujwxbTh5uDrbaLUpwDQpQdy2fkbAU"
-            alt="Hero candle"
-            className="w-full h-full object-cover brightness-[0.38]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-bg)]/80 via-[var(--color-bg)]/30 to-transparent"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg)] via-transparent to-transparent"></div>
-        </div>
-        <div className="relative z-10 px-8 md:px-16 lg:px-24 pb-24 max-w-3xl">
-          <p className="font-accent italic text-[var(--color-gold)] text-lg tracking-widest mb-5 opacity-90">Luxury you can afford. Scents you won&apos;t forget.</p>
-          <h1 className="font-display text-7xl md:text-8xl lg:text-[7rem] font-light leading-[0.92] tracking-tight mb-8">
-            Set the<br /><span className="italic text-[var(--color-gold-mid)]">Mood.</span>
-          </h1>
-          <p className="font-sans text-[var(--color-muted)] font-light text-lg mb-10 leading-relaxed max-w-lg">
-            Hand-poured in Gurgaon with premium fragrance oils and natural wax. From ₹1,350 — because every home deserves to smell extraordinary.
-          </p>
-          <div className="flex flex-wrap gap-4">
-            <Link href="/shop" className="btn-gold px-10 py-4 font-sans text-xs uppercase tracking-[0.22em] font-semibold rounded-sm">Shop Candles</Link>
-            <Link href="/customize" className="btn-outline px-10 py-4 font-sans text-xs uppercase tracking-[0.22em] font-semibold rounded-sm flex items-center gap-2">
-              <span className="text-[var(--color-gold)]">✦</span> Build Your Own
-            </Link>
+    <div className="bg-[var(--color-bg-main)]">
+      {showQuiz && <ScentQuiz onClose={() => setShowQuiz(false)} />}
+      {showGifting && <GiftingStudio onClose={() => setShowGifting(false)} />}
+
+      {/* ── HERO ── */}
+      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+        {/* Background gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#060606] via-[#0d0905] to-[#0d0d0d]" />
+        {/* Vignette */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(201,168,76,0.08),transparent)]" />
+        {/* Ember particles */}
+        <EmberParticles />
+
+        {/* Vertical line */}
+        <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-px h-72 bg-gradient-to-t from-[rgba(201,168,76,0.15)] to-transparent" />
+
+        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+          <div className="ornament-divider mb-8 opacity-50">
+            <span>✦</span>
           </div>
+          <p className="font-sans text-[9px] uppercase tracking-[0.4em] text-[var(--color-gold)] mb-6 animate-[fadeUp_0.6s_0.1s_both]">
+            Hand-Poured in Gurgaon · Small Batch · Pure Soy
+          </p>
+          <h1 className="font-display text-[clamp(3.5rem,12vw,8rem)] leading-[0.9] text-[var(--color-cream)] mb-6 animate-[fadeUp_0.7s_0.2s_both]">
+            Set the<br />
+            <em className="text-gold-gradient not-italic">Mood.</em>
+          </h1>
+          <p className="font-sans text-base text-[var(--color-cream-dim)] max-w-lg mx-auto mb-10 leading-relaxed animate-[fadeUp_0.7s_0.35s_both]">
+            Luxury soy candles crafted with rare fragrance oils —
+            warm, long-lasting, made for the moments that matter most.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-[fadeUp_0.7s_0.45s_both]">
+            <Link href="/shop" className="btn-gold px-10 py-4 rounded-sm inline-flex items-center gap-2">
+              Explore Collection <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+            <button
+              onClick={() => setShowQuiz(true)}
+              className="btn-outline px-10 py-4 rounded-sm inline-flex items-center gap-2"
+            >
+              <Sparkles className="w-3.5 h-3.5" /> Find My Scent
+            </button>
+          </div>
+          <p className="font-sans text-[10px] text-[var(--color-faint)] mt-8 animate-[fadeUp_0.7s_0.55s_both]">
+            Starting at ₹1,350 · Free shipping above ₹999 · 80–100 hr burn
+          </p>
         </div>
-        <div className="absolute bottom-8 right-8 z-10 flex flex-col items-center gap-2 opacity-40">
-          <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-muted)] rotate-90 mb-3">Scroll</span>
-          <div className="w-px h-12 bg-[var(--color-gold-mid)]/50"></div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-[fadeUp_0.7s_0.7s_both]">
+          <div className="w-px h-10 bg-gradient-to-b from-[rgba(201,168,76,0.5)] to-transparent animate-[pulse_2s_ease-in-out_infinite]" />
         </div>
       </section>
 
-      {/* MARQUEE STRIP */}
-      <div className="py-8 border-y border-[var(--color-border)]/20 bg-[var(--color-bg-deep)] overflow-hidden">
-        <div className="marquee-inner flex gap-14 shrink-0">
-          <span className="flex items-center gap-14 shrink-0">
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Free Shipping ₹2000+</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">80–100 Hr Burn Time</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">100% Natural Wax</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Hand-Poured in Gurgaon</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Gift-Ready Packaging</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-          </span>
-          <span className="flex items-center gap-14 shrink-0" aria-hidden="true">
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Free Shipping ₹2000+</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">80–100 Hr Burn Time</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">100% Natural Wax</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Hand-Poured in Gurgaon</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-            <span className="font-display text-xl uppercase tracking-[0.4em] text-[var(--color-gold)]">Gift-Ready Packaging</span><span className="text-[var(--color-gold-dim)] text-lg">◆</span>
-          </span>
+      {/* ── SEASONAL DROP BANNER ── */}
+      <section ref={addRevealRef} className="reveal bg-[var(--color-bg-deep)] border-y border-[rgba(201,168,76,0.15)] py-12 px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-gold)] mb-3">Limited Seasonal Drop</p>
+          <h2 className="font-display text-3xl sm:text-4xl text-[var(--color-cream)] italic mb-2">Spring Equinox Collection</h2>
+          <p className="font-sans text-sm text-[var(--color-faint)] mb-8">New batch drops on the 1st. Be the first to know.</p>
+          <CountdownTimer />
+        </div>
+      </section>
+
+      {/* ── MARQUEE ── */}
+      <div className="bg-[rgba(201,168,76,0.06)] border-y border-[rgba(201,168,76,0.1)] py-3 overflow-hidden">
+        <div className="marquee-track">
+          {Array.from({ length: 4 }).flatMap((_, i) => [
+            <span key={`a${i}`} className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-gold)] mx-8">Free Shipping Above ₹999</span>,
+            <span key={`b${i}`} className="text-[var(--color-gold)] mx-2 opacity-40">✦</span>,
+            <span key={`c${i}`} className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-gold)] mx-8">80–100 Hour Burn Time</span>,
+            <span key={`d${i}`} className="text-[var(--color-gold)] mx-2 opacity-40">✦</span>,
+            <span key={`e${i}`} className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-gold)] mx-8">100% Pure Soy Wax</span>,
+            <span key={`f${i}`} className="text-[var(--color-gold)] mx-2 opacity-40">✦</span>,
+            <span key={`g${i}`} className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-gold)] mx-8">Luxury Gift Packaging</span>,
+            <span key={`h${i}`} className="text-[var(--color-gold)] mx-2 opacity-40">✦</span>,
+          ])}
         </div>
       </div>
 
-      {/* FEATURED PRODUCTS */}
-      <section className="py-28 px-6 md:px-12 lg:px-24 reveal">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-6">
-            <div>
-              <p className="font-sans text-[10px] uppercase tracking-[0.35em] text-[var(--color-gold-mid)] mb-3">India&apos;s Favourite Candle Studio</p>
-              <h2 className="font-display text-5xl md:text-6xl font-light">Bestselling Scents</h2>
-            </div>
-            <Link href="/shop" className="font-sans text-[10px] uppercase tracking-widest text-[var(--color-gold)] border-b border-[var(--color-gold)]/25 pb-1 hover:border-[var(--color-gold)] transition-colors shrink-0">View All Candles →</Link>
+      {/* ── FEATURED PRODUCTS ── */}
+      <section className="section px-6">
+        <div className="container">
+          <div ref={addRevealRef} className="reveal text-center mb-14">
+            <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-gold)] mb-3">The Collection</p>
+            <h2 className="font-display text-4xl sm:text-5xl text-[var(--color-cream)] italic">Handcrafted Signatures</h2>
+            <div className="ornament-divider mt-4 max-w-xs mx-auto"><span>✦</span></div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16">
-            {featured.map((p, i) => (
-              <div key={p.slug} className={`group cursor-pointer ${i === 1 ? "md:mt-20" : ""}`}>
-                <Link href={`/shop/${p.slug}`}>
-                  <div className="aspect-[3/4] overflow-hidden rounded-sm mb-7 bg-[var(--color-bg-card)] relative">
-                    <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                    <div className="quick-buy absolute inset-0 bg-[var(--color-bg)]/50 flex items-center justify-center rounded-sm">
-                      <button
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleQuickAdd(p); }}
-                        className="btn-gold px-7 py-3 text-[9px] font-bold uppercase tracking-widest rounded-full"
-                      >
-                        Quick Add
-                      </button>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {FEATURED.map((product, i) => (
+              <div key={product.slug} ref={addRevealRef} className="reveal" style={{ transitionDelay: `${i * 80}ms` }}>
+                <Link href={`/shop/${product.slug}`} className="block group relative card-hover bg-[var(--color-bg-card)] rounded-sm overflow-hidden">
+                  {/* Image */}
+                  <div className="aspect-[4/5] overflow-hidden bg-[var(--color-bg-deep)] relative">
+                    <img
+                      src={product.imageUrl}
+                      alt={product.name}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-[400ms]" />
+                    {/* Scent Radar on hover */}
+                    {product.scentProfile && (
+                      <div className="absolute top-4 right-4">
+                        <ScentRadar profile={product.scentProfile} />
+                      </div>
+                    )}
+                    {/* Quick add overlay */}
+                    <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                      <div className="btn-gold py-2.5 px-4 rounded-sm text-center font-sans text-[9px] uppercase tracking-widest">
+                        View Details
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-5">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="font-display text-xl text-[var(--color-cream)] leading-tight">{product.name}</h3>
+                      <span className="font-sans text-sm font-semibold text-[var(--color-gold)]">₹{product.price.toLocaleString("en-IN")}</span>
+                    </div>
+                    <p className="font-sans text-[10px] text-[var(--color-faint)] uppercase tracking-widest mb-3">{product.category}</p>
+                    {product.scentNotes && (
+                      <p className="font-sans text-xs text-[var(--color-cream-dim)] leading-relaxed">{product.scentNotes.slice(0, 3).join(" · ")}</p>
+                    )}
+                    <div className="flex items-center justify-between mt-4 pt-4 border-t border-[rgba(201,168,76,0.08)]">
+                      <BurnVisualizer burnTime={product.burnTime} size="sm" />
+                      <span className="font-sans text-[9px] uppercase tracking-widest text-[var(--color-faint)]">{product.weight}</span>
                     </div>
                   </div>
                 </Link>
-                <Link href={`/shop/${p.slug}`}>
-                  <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-gold)]/50 mb-2 font-semibold">{p.series}</p>
-                  <h3 className="font-display text-3xl mb-2 group-hover:text-[var(--color-gold)] transition-colors">{p.name}</h3>
-                  <p className="font-sans text-[var(--color-faint)] text-sm leading-relaxed">{p.scentNotes.join(" · ")}</p>
-                </Link>
               </div>
+            ))}
+          </div>
+
+          <div ref={addRevealRef} className="reveal text-center mt-12">
+            <Link href="/shop" className="btn-outline px-10 py-4 rounded-sm inline-flex items-center gap-2">
+              View All Candles <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── SCENT QUIZ CTA ── */}
+      <section ref={addRevealRef} className="reveal section-sm px-6 bg-[var(--color-bg-deep)]">
+        <div className="container">
+          <div className="border border-[rgba(201,168,76,0.2)] rounded-sm p-8 sm:p-12 text-center bg-[radial-gradient(ellipse_at_center,rgba(201,168,76,0.05),transparent_70%)]">
+            <Sparkles className="w-8 h-8 text-[var(--color-gold)] mx-auto mb-4" />
+            <h2 className="font-display text-3xl sm:text-4xl text-[var(--color-cream)] italic mb-3">Not sure which scent?</h2>
+            <p className="font-sans text-sm text-[var(--color-faint)] mb-8 max-w-md mx-auto leading-relaxed">
+              Answer 3 quick questions and we&apos;ll recommend the perfect candle for your mood, occasion, and preferences.
+            </p>
+            <button onClick={() => setShowQuiz(true)} className="btn-gold px-10 py-4 rounded-sm inline-flex items-center gap-2">
+              <Sparkles className="w-3.5 h-3.5" /> Take the Scent Quiz
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ── MOOD BOARD ── */}
+      <section className="section px-6">
+        <div className="container">
+          <div ref={addRevealRef} className="reveal text-center mb-12">
+            <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-gold)] mb-3">Mood Pairing</p>
+            <h2 className="font-display text-4xl sm:text-5xl text-[var(--color-cream)] italic">Set the Scene</h2>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {MOOD_BOARDS.map((m, i) => (
+              <button
+                key={m.mood}
+                ref={addRevealRef}
+                onClick={() => setActiveMood(activeMood === i ? null : i)}
+                className={`reveal text-left p-6 rounded-sm border transition-all duration-300 ${
+                  activeMood === i
+                    ? "border-[var(--color-gold)] bg-[rgba(201,168,76,0.08)]"
+                    : "border-[rgba(201,168,76,0.12)] bg-[var(--color-bg-card)] hover:border-[rgba(201,168,76,0.3)]"
+                }`}
+                style={{ transitionDelay: `${i * 60}ms` }}
+              >
+                <span className="text-3xl block mb-3">{m.icon}</span>
+                <h3 className="font-display text-xl text-[var(--color-cream)] mb-2">{m.mood}</h3>
+                <p className="font-sans text-[10px] text-[var(--color-faint)] leading-relaxed">{m.desc}</p>
+                {activeMood === i && (
+                  <div className="mt-4 pt-4 border-t border-[rgba(201,168,76,0.15)] animate-[fadeUp_0.3s_ease]">
+                    <p className="font-sans text-[9px] uppercase tracking-widest text-[var(--color-gold)] mb-1">Recommended</p>
+                    <Link href={`/shop/${m.product}`} className="font-display text-lg text-[var(--color-cream)] hover:text-[var(--color-gold)] transition-colors block">{m.candle}</Link>
+                    <p className="font-sans text-[9px] text-[var(--color-faint)] mt-1">🎵 {m.playlist}</p>
+                  </div>
+                )}
+              </button>
             ))}
           </div>
         </div>
       </section>
 
-      {/* STORY SECTION */}
-      <section className="flex flex-col md:flex-row min-h-[580px] reveal">
-        <div className="w-full md:w-1/2 overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=800&q=80" alt="Artisan" className="w-full h-full object-cover" style={{ minHeight: "400px" }} />
-        </div>
-        <div className="w-full md:w-1/2 bg-[var(--color-bg-low)] flex flex-col justify-center p-10 lg:p-20 gap-7">
-          <span className="font-accent italic text-[var(--color-gold)] text-xl">Made with intention. Priced with heart.</span>
-          <h2 className="font-display text-5xl md:text-6xl leading-tight font-light">Why settle for<br />ordinary<br />when you can burn<br /><span className="italic text-[var(--color-gold-mid)]">extraordinary?</span></h2>
-          <p className="font-sans text-[var(--color-muted)] font-light leading-relaxed max-w-md">
-            Born in Gurgaon, Kanti was built on one belief: premium fragrance should be accessible to everyone. Each candle is hand-poured in small batches, tested for scent throw, and packaged to gift — at a price that actually makes sense.
-          </p>
-          <Link href="/about" className="btn-gold w-fit px-8 py-4 font-sans text-xs uppercase tracking-[0.22em] font-semibold rounded-sm">Our Story</Link>
+      {/* ── BRAND STORY ── */}
+      <section ref={addRevealRef} className="reveal section px-6 bg-[var(--color-bg-deep)]">
+        <div className="container">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-gold)] mb-4">Our Story</p>
+              <h2 className="font-display text-4xl sm:text-5xl text-[var(--color-cream)] italic leading-tight mb-6">
+                Poured slowly.<br />Crafted with care.
+              </h2>
+              <p className="font-sans text-base text-[var(--color-cream-dim)] leading-8 mb-6">
+                Kanti was born in a small Gurgaon studio, from the belief that fragrance should do more than smell good — it should slow you down, anchor you in the present, and remind you that the ordinary can be extraordinary.
+              </p>
+              <p className="font-sans text-base text-[var(--color-cream-dim)] leading-8 mb-8">
+                Every candle is poured by hand in batches of 24. No machines. No shortcuts. Just rare fragrance oils, pure soy wax, and the kind of attention to detail that only comes from genuinely caring about what you make.
+              </p>
+              <div className="grid grid-cols-3 gap-6">
+                {[["100%", "Pure Soy"], ["80–100hr", "Burn Time"], ["24", "Per Batch"]].map(([val, label]) => (
+                  <div key={label}>
+                    <div className="font-display text-3xl text-gold-gradient mb-1">{val}</div>
+                    <div className="font-sans text-[9px] uppercase tracking-widest text-[var(--color-faint)]">{label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="relative">
+              <div className="aspect-square rounded-sm overflow-hidden bg-[var(--color-bg-card)] glow-ring">
+                <div className="w-full h-full bg-gradient-to-br from-[#1a1208] via-[#0d0905] to-[#0d0d0d] flex items-center justify-center">
+                  <svg viewBox="0 0 200 220" className="w-32 h-36 opacity-60">
+                    <rect x="80" y="40" width="40" height="130" rx="4" fill="url(#cGrad)" />
+                    <ellipse cx="100" cy="40" rx="20" ry="6" fill="#1a1208" />
+                    <line x1="100" y1="20" x2="100" y2="38" stroke="#8B7355" strokeWidth="2" />
+                    <ellipse cx="100" cy="14" rx="8" ry="12" fill="url(#fGrad)" className="flame" />
+                    <defs>
+                      <linearGradient id="cGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#C9A84C" stopOpacity="0.4" />
+                        <stop offset="100%" stopColor="#8B6914" stopOpacity="0.2" />
+                      </linearGradient>
+                      <linearGradient id="fGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#FFE566" />
+                        <stop offset="100%" stopColor="#FF4500" stopOpacity="0.6" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </div>
+              </div>
+              <div className="absolute -bottom-6 -right-6 bg-[var(--color-bg-card)] border border-[rgba(201,168,76,0.2)] rounded-sm p-5 glow-ring">
+                <BatchCounter batchSize={24} pouredDate="March 20, 2026" remaining={9} />
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
-      <section className="py-28 px-6 md:px-12 lg:px-24 bg-[var(--color-bg-deep)] reveal">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="font-sans text-[10px] uppercase tracking-[0.4em] text-[var(--color-gold-mid)] mb-3">2,000+ Happy Homes</p>
-            <h2 className="font-display text-5xl md:text-6xl font-light">People Are Talking</h2>
+      {/* ── GIFTING STUDIO ── */}
+      <section ref={addRevealRef} className="reveal section-sm px-6">
+        <div className="container">
+          <div className="bg-[var(--color-bg-card)] border border-[rgba(201,168,76,0.15)] rounded-sm p-8 sm:p-12 flex flex-col sm:flex-row items-center gap-8">
+            <div className="flex-1">
+              <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-gold)] mb-3">Gifting</p>
+              <h2 className="font-display text-3xl sm:text-4xl text-[var(--color-cream)] italic mb-3">The perfect gift, personalised.</h2>
+              <p className="font-sans text-sm text-[var(--color-faint)] leading-relaxed max-w-md">
+                Choose a candle, write a message, pick your wrapping — and we&apos;ll generate a beautiful gift card to include in the package.
+              </p>
+            </div>
+            <button
+              onClick={() => setShowGifting(true)}
+              className="btn-gold px-10 py-4 rounded-sm inline-flex items-center gap-2 shrink-0"
+            >
+              <Gift className="w-4 h-4" /> Open Gifting Studio
+            </button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((t, i) => (
+        </div>
+      </section>
+
+      {/* ── TESTIMONIALS ── */}
+      <section className="section px-6 bg-[var(--color-bg-deep)]">
+        <div className="container">
+          <div ref={addRevealRef} className="reveal text-center mb-12">
+            <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-gold)] mb-3">What People Say</p>
+            <h2 className="font-display text-4xl sm:text-5xl text-[var(--color-cream)] italic">Stories of Light</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {TESTIMONIALS.map((t, i) => (
               <div
                 key={i}
-                className="bg-[var(--color-bg-low)] p-8 rounded-sm border border-[var(--color-border)]/15 flex flex-col gap-5 card-hover"
+                ref={addRevealRef}
+                className="reveal rounded-sm overflow-hidden border border-[rgba(201,168,76,0.12)]"
+                style={{ transitionDelay: `${i * 100}ms` }}
               >
-                <div className="flex gap-1">
-                  {Array.from({ length: t.rating }).map((_, j) => (
-                    <Star key={j} className="w-4 h-4 fill-[var(--color-gold)] text-[var(--color-gold)]" />
-                  ))}
-                </div>
-                <p className="font-accent italic text-[var(--color-muted)] text-lg leading-relaxed flex-1">
-                  &ldquo;{t.quote}&rdquo;
-                </p>
-                <div>
-                  <p className="font-sans text-sm text-[var(--color-cream)] font-medium">{t.name}</p>
-                  <p className="font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]">{t.location}</p>
+                <div className={`bg-gradient-to-br ${t.gradient} p-8 h-full flex flex-col`}>
+                  <div className="flex gap-0.5 mb-4">
+                    {Array.from({ length: 5 }).map((_, j) => (
+                      <Star key={j} className="w-3.5 h-3.5 fill-[var(--color-gold)] text-[var(--color-gold)]" />
+                    ))}
+                  </div>
+                  <p className="font-display text-lg italic text-[var(--color-cream)] leading-relaxed flex-1 mb-6">&ldquo;{t.quote}&rdquo;</p>
+                  <div>
+                    <p className="font-sans text-sm font-semibold text-[var(--color-gold)]">{t.author}</p>
+                    <p className="font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]">{t.location}</p>
+                  </div>
                 </div>
               </div>
             ))}
@@ -199,48 +367,37 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CUSTOMIZE TEASER */}
-      <section className="relative py-32 px-6 overflow-hidden bg-[var(--color-bg)] text-center reveal">
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 60% 50% at 50% 60%, rgba(198,150,63,.12) 0%, transparent 70%)" }}></div>
-        <div className="relative z-10 max-w-3xl mx-auto space-y-8">
-          <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-[var(--color-gold-mid)]">The Kanti Custom Studio</span>
-          <h2 className="font-display text-6xl md:text-7xl italic font-light">A Candle Only<br />You Could Make</h2>
-          <p className="font-sans text-[var(--color-muted)] font-light text-lg leading-relaxed max-w-xl mx-auto">
-            Pick your fragrance, choose your vessel, and let AI design a label that&apos;s entirely you. Perfect for gifts, weddings, or just treating yourself the right way.
+      {/* ── NEWSLETTER ── */}
+      <section ref={addRevealRef} className="reveal section px-6">
+        <div className="container max-w-2xl text-center">
+          <div className="ornament-divider mb-8 opacity-40"><span>✦</span></div>
+          <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-gold)] mb-4">Stay in the Light</p>
+          <h2 className="font-display text-4xl sm:text-5xl text-[var(--color-cream)] italic mb-4">
+            10% off your first order.
+          </h2>
+          <p className="font-sans text-sm text-[var(--color-faint)] leading-relaxed mb-8">
+            Subscribe for early access to new drops, candle rituals, and a welcome discount.
           </p>
-          <Link href="/customize" className="btn-outline px-14 py-5 font-sans text-xs uppercase tracking-[0.3em] font-semibold rounded-sm flex items-center justify-center gap-3 mx-auto w-fit">
-            <span className="text-[var(--color-gold)] text-base">✦</span> Design Your Candle
-          </Link>
-        </div>
-      </section>
-
-      {/* EMAIL SIGNUP */}
-      <section className="py-24 px-6 md:px-12 lg:px-24 reveal">
-        <div className="max-w-5xl mx-auto bg-[var(--color-cream)] p-12 md:p-20 rounded-sm relative overflow-hidden text-center" style={{ border: "4px solid rgba(198,150,63,.2)" }}>
-          <div className="absolute top-0 right-0 w-56 h-56 rounded-full -translate-y-1/2 translate-x-1/2" style={{ background: "rgba(198,150,63,.06)" }}></div>
-          <div className="relative z-10 space-y-7">
-            <span className="font-accent italic text-[var(--color-gold-mid)] text-xl">10% off your first order</span>
-            <h2 className="font-display text-5xl md:text-6xl text-[var(--color-bg)] font-light">Get Your Welcome Gift</h2>
-            <p className="font-sans text-[var(--color-bg)]/60 font-light max-w-md mx-auto leading-relaxed">
-              Subscribe and receive an exclusive discount code instantly — plus early access to seasonal drops and members-only offers.
-            </p>
-            <form onSubmit={handleNewsletterSubmit} className="max-w-md mx-auto flex flex-col md:flex-row gap-4">
+          {!subscribed ? (
+            <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <input
                 type="email"
-                placeholder="Enter your email for 10% off"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="flex-grow bg-transparent border-b-2 border-[var(--color-bg)]/20 focus:border-[var(--color-gold-mid)] focus:outline-none text-[var(--color-bg)] placeholder:text-[var(--color-bg)]/40 font-light py-3 text-sm"
+                placeholder="your@email.com"
+                required
+                className="input-luxury flex-1 px-5 py-4 rounded-sm font-sans text-sm"
               />
-              <button
-                type="submit"
-                disabled={emailSubmitted}
-                className="bg-[var(--color-bg)] text-[var(--color-gold)] px-8 py-3 font-sans text-xs uppercase tracking-widest font-semibold rounded-sm hover:bg-[var(--color-bg-high)] transition-colors disabled:opacity-50"
-              >
-                {emailSubmitted ? "Check Your Inbox ✓" : "Claim 10% Off"}
+              <button type="submit" className="btn-gold px-8 py-4 rounded-sm shrink-0">
+                Claim 10% Off
               </button>
             </form>
-          </div>
+          ) : (
+            <div className="bg-[rgba(201,168,76,0.06)] border border-[rgba(201,168,76,0.2)] rounded-sm px-8 py-5 inline-block">
+              <p className="font-display text-xl italic text-[var(--color-gold-light)]">Welcome to Kanti. ✦</p>
+              <p className="font-sans text-xs text-[var(--color-faint)] mt-1">Your discount code is on its way.</p>
+            </div>
+          )}
         </div>
       </section>
     </div>

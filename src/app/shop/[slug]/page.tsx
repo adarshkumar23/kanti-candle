@@ -8,6 +8,8 @@ import { useCart } from "@/context/CartContext";
 import { useToast } from "@/context/ToastContext";
 import { useRevealAnimation } from "@/hooks/useRevealAnimation";
 import { ChevronRight, Minus, Plus, Tag, Copy } from "lucide-react";
+import BatchCounter from "@/components/BatchCounter";
+import BurnVisualizer from "@/components/BurnVisualizer";
 
 interface ActiveDiscount {
   id: string;
@@ -42,7 +44,6 @@ export default function ProductDetail() {
       .then((r) => r.json())
       .then((data) => {
         if (Array.isArray(data)) {
-          // Filter discounts applicable to this product's category
           const applicable = data.filter((d: ActiveDiscount) => {
             if (d.appliesToAll) return true;
             if (d.categories && product) {
@@ -66,9 +67,9 @@ export default function ProductDetail() {
 
   if (!product) {
     return (
-      <div className="pt-24 min-h-screen flex flex-col items-center justify-center gap-6">
-        <h1 className="font-display text-5xl text-[var(--color-faint)]">Product not found</h1>
-        <Link href="/shop" className="btn-gold px-8 py-3 font-sans text-xs uppercase tracking-[0.22em] font-semibold rounded-sm">
+      <div className="pt-[72px] min-h-screen flex flex-col items-center justify-center gap-6 bg-[var(--color-bg-main)]">
+        <h1 className="font-display text-5xl italic text-[var(--color-faint)]">Product not found</h1>
+        <Link href="/shop" className="btn-gold px-8 py-3 rounded-sm font-sans text-xs uppercase tracking-[0.22em] font-semibold">
           Back to Shop
         </Link>
       </div>
@@ -96,7 +97,7 @@ export default function ProductDetail() {
   const related = products.filter((p) => p.category === product.category && p.slug !== product.slug).slice(0, 3);
 
   return (
-    <div className="pt-24 min-h-screen">
+    <div className="pt-[72px] min-h-screen bg-[var(--color-bg-main)]">
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 py-6">
         <nav className="flex items-center gap-2 font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]">
@@ -104,7 +105,7 @@ export default function ProductDetail() {
           <ChevronRight className="w-3 h-3" />
           <Link href="/shop" className="hover:text-[var(--color-gold)] transition-colors">Shop</Link>
           <ChevronRight className="w-3 h-3" />
-          <span className="text-[var(--color-gold-mid)]">{product.name}</span>
+          <span className="text-[var(--color-gold)]">{product.name}</span>
         </nav>
       </div>
 
@@ -113,7 +114,7 @@ export default function ProductDetail() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
           {/* Image Gallery */}
           <div className="reveal">
-            <div className="aspect-square overflow-hidden rounded-sm bg-[var(--color-bg-card)] group mb-4">
+            <div className="aspect-square overflow-hidden rounded-sm bg-[var(--color-bg-card)] group mb-4 glow-ring">
               <img
                 src={galleryImages[activeImage]}
                 alt={product.name}
@@ -128,7 +129,7 @@ export default function ProductDetail() {
                     onClick={() => setActiveImage(i)}
                     className={`w-20 h-20 rounded-sm overflow-hidden border-2 transition-all shrink-0 ${
                       activeImage === i
-                        ? "border-[var(--color-gold-mid)] opacity-100"
+                        ? "border-[var(--color-gold)] opacity-100"
                         : "border-transparent opacity-50 hover:opacity-80"
                     }`}
                   >
@@ -141,14 +142,23 @@ export default function ProductDetail() {
 
           {/* Details */}
           <div className="reveal" style={{ transitionDelay: "150ms" }}>
-            <p className="font-sans text-[10px] uppercase tracking-[0.35em] text-[var(--color-gold-mid)] mb-3">{product.series}</p>
-            <h1 className="font-display text-5xl md:text-6xl font-light mb-4">{product.name}</h1>
+            <p className="font-sans text-[10px] uppercase tracking-[0.35em] text-[var(--color-gold)] mb-3">{product.series}</p>
+            <h1 className="font-display text-5xl md:text-6xl text-[var(--color-cream)] italic mb-4">{product.name}</h1>
+
+            {/* Batch Counter */}
+            <div className="mb-5">
+              <BatchCounter
+                batchSize={product.batchSize || 24}
+                pouredDate={product.pouredDate || "March 2026"}
+              />
+            </div>
+
             {product.badge && (
               <span className={`inline-block px-3 py-1 text-[9px] font-bold tracking-[0.2em] uppercase rounded-full mb-6 ${
                 product.badge === "Bestseller"
-                  ? "bg-[var(--color-gold-mid)] text-[var(--color-bg-deep)]"
-                  : product.badge === "New"
                   ? "bg-[var(--color-gold)] text-[var(--color-bg-deep)]"
+                  : product.badge === "New"
+                  ? "bg-[var(--color-gold-light)] text-[var(--color-bg-deep)]"
                   : "bg-[var(--color-cream)] text-[var(--color-bg-deep)]"
               }`}>
                 {product.badge}
@@ -157,9 +167,18 @@ export default function ProductDetail() {
             <p className="font-sans text-[var(--color-faint)] text-sm tracking-wider mb-6">{product.scentNotes.join(" · ")}</p>
 
             {/* Price */}
-            <div className="mb-8">
+            <div className="mb-6">
               <p className="font-display text-4xl text-[var(--color-gold)]">₹{size.price.toLocaleString("en-IN")}</p>
               <p className="font-sans text-[10px] text-[var(--color-faint)] mt-1 uppercase tracking-wider">{size.burnTime} burn time</p>
+            </div>
+
+            {/* Burn Visualizer */}
+            <div className="mb-6 flex items-center gap-4">
+              <BurnVisualizer burnTime={product.burnTime} size="md" />
+              <div>
+                <p className="font-sans text-[9px] uppercase tracking-widest text-[var(--color-faint)] mb-1">Burn Time</p>
+                <p className="font-sans text-sm text-[var(--color-cream-dim)]">{product.burnTime}</p>
+              </div>
             </div>
 
             {/* Size Picker */}
@@ -172,8 +191,8 @@ export default function ProductDetail() {
                     onClick={() => setSelectedSize(i)}
                     className={`font-sans text-[10px] py-3 px-6 rounded-sm border transition-all ${
                       selectedSize === i
-                        ? "border-[var(--color-gold-mid)] text-[var(--color-gold)] bg-[var(--color-bg-high)]"
-                        : "border-[var(--color-border)]/30 text-[var(--color-faint)] bg-[var(--color-bg-card)] hover:border-[var(--color-gold-dim)]"
+                        ? "border-[var(--color-gold)] text-[var(--color-gold)] bg-[rgba(201,168,76,0.08)]"
+                        : "border-[rgba(201,168,76,0.15)] text-[var(--color-faint)] bg-[var(--color-bg-card)] hover:border-[rgba(201,168,76,0.4)]"
                     }`}
                   >
                     <span className="block font-semibold">{s.weight}</span>
@@ -186,14 +205,14 @@ export default function ProductDetail() {
             {/* Quantity */}
             <div className="mb-8">
               <p className="font-sans text-[9px] uppercase tracking-[0.25em] text-[var(--color-faint)] mb-4">Quantity</p>
-              <div className="flex items-center border border-[var(--color-border)]/30 rounded-sm w-fit">
+              <div className="flex items-center border border-[rgba(201,168,76,0.2)] rounded-sm w-fit">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   className="px-4 py-3 text-[var(--color-faint)] hover:text-[var(--color-gold)] transition-colors"
                 >
                   <Minus className="w-4 h-4" />
                 </button>
-                <span className="px-6 py-3 font-sans text-sm text-[var(--color-muted)] border-x border-[var(--color-border)]/30 min-w-[48px] text-center">
+                <span className="px-6 py-3 font-sans text-sm text-[var(--color-muted)] border-x border-[rgba(201,168,76,0.2)] min-w-[48px] text-center">
                   {quantity}
                 </span>
                 <button
@@ -208,7 +227,7 @@ export default function ProductDetail() {
             {/* Add to Cart */}
             <button
               onClick={handleAddToCart}
-              className="btn-gold w-full py-4 font-sans text-xs uppercase tracking-[0.22em] font-semibold rounded-sm mb-6"
+              className="btn-gold w-full py-4 rounded-sm font-sans text-xs uppercase tracking-[0.22em] font-semibold mb-6"
             >
               Add to Cart — ₹{(size.price * quantity).toLocaleString("en-IN")}
             </button>
@@ -216,13 +235,13 @@ export default function ProductDetail() {
             {/* Discount Offers */}
             {activeDiscounts.length > 0 && (
               <div className="mb-10 space-y-3">
-                <p className="font-sans text-[9px] uppercase tracking-[0.25em] text-[var(--color-gold-mid)] flex items-center gap-2">
+                <p className="font-sans text-[9px] uppercase tracking-[0.25em] text-[var(--color-gold)] flex items-center gap-2">
                   <Tag className="w-3.5 h-3.5" /> Available Offers
                 </p>
                 {activeDiscounts.map((d) => (
                   <div
                     key={d.id}
-                    className="flex items-center justify-between bg-[var(--color-gold)]/[0.04] border border-[var(--color-gold)]/15 rounded-sm px-4 py-3"
+                    className="flex items-center justify-between bg-[rgba(201,168,76,0.04)] border border-[rgba(201,168,76,0.15)] rounded-sm px-4 py-3"
                   >
                     <div className="flex-1 min-w-0">
                       <p className="font-sans text-sm text-[var(--color-muted)]">
@@ -237,7 +256,7 @@ export default function ProductDetail() {
                     </div>
                     <button
                       onClick={() => handleCopyCode(d.code)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 border border-[var(--color-gold)]/30 rounded-sm font-sans text-[9px] uppercase tracking-widest text-[var(--color-gold)] hover:bg-[var(--color-gold)]/10 transition-colors shrink-0 ml-3"
+                      className="flex items-center gap-1.5 px-3 py-1.5 border border-[rgba(201,168,76,0.3)] rounded-sm font-sans text-[9px] uppercase tracking-widest text-[var(--color-gold)] hover:bg-[rgba(201,168,76,0.1)] transition-colors shrink-0 ml-3"
                     >
                       <Copy className="w-3 h-3" />
                       {copiedCode === d.code ? "Copied!" : "Copy"}
@@ -248,7 +267,7 @@ export default function ProductDetail() {
             )}
 
             {/* Accordions */}
-            <div className="border-t border-[var(--color-border)]/20 space-y-0">
+            <div className="border-t border-[rgba(201,168,76,0.12)] space-y-0">
               {[
                 { id: "about", title: "About This Candle", content: product.description },
                 { id: "notes", title: "Scent Notes", content: product.scentNotes.map((n, i) => `${i === 0 ? "Top" : i === 1 ? "Heart" : "Base"}: ${n}`).join("\n") },
@@ -258,7 +277,7 @@ export default function ProductDetail() {
                   content: "Trim the wick to 5mm before each use. Allow the wax to melt to the edges on the first burn. Never burn for more than 4 hours at a time. Keep away from drafts and flammable objects. Discontinue use when 10mm of wax remains.",
                 },
               ].map((section) => (
-                <div key={section.id} className="border-b border-[var(--color-border)]/20">
+                <div key={section.id} className="border-b border-[rgba(201,168,76,0.12)]">
                   <button
                     onClick={() => setActiveAccordion(activeAccordion === section.id ? null : section.id)}
                     className="w-full flex justify-between items-center py-5"
@@ -270,7 +289,7 @@ export default function ProductDetail() {
                       }`}
                     />
                   </button>
-                  <div className={`overflow-hidden transition-all duration-400 ${activeAccordion === section.id ? "max-h-48 pb-5" : "max-h-0"}`}>
+                  <div className={`overflow-hidden transition-all duration-[400ms] ${activeAccordion === section.id ? "max-h-48 pb-5" : "max-h-0"}`}>
                     <p className="font-sans text-sm text-[var(--color-faint)] leading-relaxed whitespace-pre-line">{section.content}</p>
                   </div>
                 </div>
@@ -286,22 +305,24 @@ export default function ProductDetail() {
           <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
             <div className="flex justify-between items-end mb-12">
               <div>
-                <p className="font-sans text-[10px] uppercase tracking-[0.35em] text-[var(--color-gold-mid)] mb-3">More to Discover</p>
-                <h2 className="font-display text-4xl font-light">You May Also Like</h2>
+                <p className="font-sans text-[9px] uppercase tracking-[0.35em] text-[var(--color-gold)] mb-3">More to Discover</p>
+                <h2 className="font-display text-4xl text-[var(--color-cream)] italic">You May Also Like</h2>
               </div>
-              <Link href="/shop" className="font-sans text-[10px] uppercase tracking-widest text-[var(--color-gold)] border-b border-[var(--color-gold)]/25 pb-1 hover:border-[var(--color-gold)] transition-colors">
+              <Link href="/shop" className="font-sans text-[10px] uppercase tracking-widest text-[var(--color-gold)] border-b border-[rgba(201,168,76,0.25)] pb-1 hover:border-[var(--color-gold)] transition-colors">
                 View All →
               </Link>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {related.map((p) => (
-                <Link key={p.slug} href={`/shop/${p.slug}`} className="group">
-                  <div className="aspect-square overflow-hidden rounded-sm mb-5 bg-[var(--color-bg-card)]">
+                <Link key={p.slug} href={`/shop/${p.slug}`} className="group card-hover bg-[var(--color-bg-card)] rounded-sm overflow-hidden">
+                  <div className="aspect-[4/5] overflow-hidden bg-[var(--color-bg-deep)]">
                     <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   </div>
-                  <p className="font-sans text-[9px] text-[var(--color-gold)]/50 uppercase tracking-[0.25em] mb-1">{p.series}</p>
-                  <h3 className="font-display text-xl mb-1 group-hover:text-[var(--color-gold)] transition-colors">{p.name}</h3>
-                  <span className="font-sans text-[var(--color-gold-mid)] text-sm font-semibold">From ₹{p.sizes[0].price.toLocaleString("en-IN")}</span>
+                  <div className="p-5">
+                    <p className="font-sans text-[9px] text-[var(--color-faint)] uppercase tracking-[0.25em] mb-1">{p.series}</p>
+                    <h3 className="font-display text-xl text-[var(--color-cream)] mb-1 group-hover:text-[var(--color-gold)] transition-colors">{p.name}</h3>
+                    <span className="font-sans text-[var(--color-gold)] text-sm font-semibold">₹{p.price.toLocaleString("en-IN")}</span>
+                  </div>
                 </Link>
               ))}
             </div>

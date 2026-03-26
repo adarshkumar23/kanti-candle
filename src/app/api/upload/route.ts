@@ -1,35 +1,51 @@
-import { put } from '@vercel/blob';
+import { v2 as cloudinary } from 'cloudinary';
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 export async function POST(request: Request): Promise<NextResponse> {
   try {
-    // Support both naming conventions: custom store prefix or default
-    const token =
-      process.env.kanticandles_READ_WRITE_TOKEN ||
-      process.env.BLOB_READ_WRITE_TOKEN;
-
-    if (!token) {
-      return NextResponse.json(
-        { error: 'Storage not configured. Add kanticandles_READ_WRITE_TOKEN to your environment variables and redeploy.' },
-        { status: 503 }
-      );
+    if (!process.env.CLOUDINARY_API_SECRET) {
+      return NextResponse.json({ error: 'Storage not configured.' }, { status: 503 });
     }
 
-    const { searchParams } = new URL(request.url);
-    const filename = searchParams.get('filename') || `upload-${Date.now()}.jpg`;
+    const formData = await request.formData();
+    const file = formData.get('file') as File | null;
 
-    if (!request.body) {
-      return NextResponse.json({ error: 'No file received' }, { status: 400 });
+    if (!file) {
+      // Try raw body upload (filename in query)
+      const { searchParams } = new URL(request.url);
+      const filename = searchParams.get('filename') || `upload-${Date.now()}.jpg`;
+      const buffer = Buffer.from(await request.arrayBuffer());
+      const b64 = buffer.toString('base64');
+      const dataUri = `data:image/jpeg;base64,${b64}`;
+      const result = await cloudinary.uploader.upload(dataUri, {
+        folder: 'kanti-candles',
+        public_id: filename.replace(/\.[^.]+$/, ''),
+        overwrite: false,
+        unique_filename: true,
+      });
+      try { await prisma.galleryImage.create({ data: { url: result.secure_url } }); } catch {}
+      return NextResponse.json({ url: result.secure_url, success: true });
     }
 
-    const blob = await put(filename, request.body, { access: 'public', token, addRandomSuffix: true });
-
-    await prisma.galleryImage.create({ data: { url: blob.url } });
-
-    return NextResponse.json({ url: blob.url, success: true });
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const b64 = buffer.toString('base64');
+    const dataUri = `data:${file.type};base64,${b64}`;
+    const result = await cloudinary.uploader.upload(dataUri, {
+      folder: 'kanti-candles',
+      overwrite: false,
+      unique_filename: true,
+    });
+    try { await prisma.galleryImage.create({ data: { url: result.secure_url } }); } catch {}
+    return NextResponse.json({ url: result.secure_url, success: true });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }

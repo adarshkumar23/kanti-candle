@@ -1,135 +1,289 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #131313;
-  --color-bg-low: #1C1B1B;
-  --color-bg-card: #201F1F;
-  --color-bg-high: #2A2A2A;
-  --color-bg-deep: #0E0E0E;
-  --color-gold: #F3BE63;
-  --color-gold-mid: #C6963F;
-  --color-gold-dim: #9A7028;
-  --color-cream: #F7F0E3;
-  --color-muted: #D3C4B2;
-  --color-faint: #9B8F7E;
-  --color-border: #4F4537;
+  --font-display: var(--font-cormorant, "Cormorant Garamond", Georgia, serif);
+  --font-sans: var(--font-dm-sans, "DM Sans", system-ui, sans-serif);
 
-  --font-display: "Cormorant Garamond", serif;
-  --font-accent: "Playfair Display", serif;
-  --font-news: "Newsreader", serif;
-  --font-sans: "DM Sans", sans-serif;
+  --color-gold:       #C9A84C;
+  --color-gold-light: #F0D080;
+  --color-gold-mid:   #D4A853;
+  --color-gold-deep:  #8B6914;
+  --color-cream:      #F5EDD6;
+  --color-cream-dim:  #C8B89A;
+
+  --color-bg-deep:    #0A0A0A;
+  --color-bg-main:    #111111;
+  --color-bg-card:    #181818;
+  --color-bg-low:     #141414;
+  --color-bg-glass:   rgba(10,10,10,0.75);
+
+  --color-border:     #C9A84C;
+  --color-muted:      #E8DCC8;
+  --color-faint:      #7A6E5F;
+  --color-text:       #F5EDD6;
+
+  --color-glow:       rgba(201,168,76,0.15);
+  --color-glow-strong:rgba(201,168,76,0.35);
 }
 
-/* ─── Reset ─────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; }
+/* ── Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
 
 body {
-  background: var(--color-bg);
-  color: #e5e2e1;
+  background-color: var(--color-bg-main);
+  color: var(--color-text);
   font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* ─── Page enter animation ───────────────────────────────── */
+/* ── Typography ── */
+.font-display { font-family: var(--font-display); }
+.font-sans    { font-family: var(--font-sans); }
+
+h1, h2, h3 { font-family: var(--font-display); color: var(--color-cream); line-height: 1.1; }
+
+/* ── Gold gradient text ── */
+.text-gold-gradient {
+  background: linear-gradient(135deg, var(--color-gold-deep) 0%, var(--color-gold) 40%, var(--color-gold-light) 65%, var(--color-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Shimmer animation ── */
+.text-shimmer {
+  background: linear-gradient(90deg, var(--color-gold-deep) 0%, var(--color-gold-light) 40%, var(--color-gold-deep) 80%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+@keyframes shimmer { to { background-position: 200% center; } }
+
+/* ── Page enter ── */
+.page-enter { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both; }
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.page-enter {
-  animation: fadeUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
 
-/* ─── Glassmorphism nav ──────────────────────────────────── */
-.glass {
-  background: rgba(14, 14, 14, 0.80);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+/* ── Reveal on scroll ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1);
 }
+.reveal.visible { opacity: 1; transform: translateY(0); }
 
-/* ─── Marquee ────────────────────────────────────────────── */
-.marquee-inner {
-  display: flex;
-  gap: 4rem;
-  white-space: nowrap;
-  animation: marquee 32s linear infinite;
-}
-@keyframes marquee {
-  to { transform: translateX(-50%); }
-}
-
-/* ─── Buttons ────────────────────────────────────────────── */
+/* ── Gold glow button ── */
 .btn-gold {
-  background: var(--color-gold-mid);
-  color: #3a2600;
-  transition: background 0.3s, box-shadow 0.3s, transform 0.15s;
+  background: linear-gradient(135deg, var(--color-gold-deep), var(--color-gold), var(--color-gold-light));
+  color: #0A0A0A;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  border: none;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.22,1,0.36,1);
+  box-shadow: 0 0 0 0 var(--color-glow);
 }
-.btn-gold:hover {
-  background: var(--color-gold);
-  box-shadow: 0 0 28px rgba(243, 190, 99, 0.35);
-  transform: translateY(-1px);
+.btn-gold::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--color-gold-light), var(--color-gold));
+  opacity: 0;
+  transition: opacity 0.3s;
 }
-.btn-gold:active { transform: translateY(0); }
+.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 32px var(--color-glow-strong); }
+.btn-gold:hover::before { opacity: 1; }
 
+/* ── Outline button ── */
 .btn-outline {
-  border: 1px solid var(--color-gold-mid);
+  background: transparent;
   color: var(--color-gold);
-  transition: background 0.3s, box-shadow 0.3s, transform 0.15s;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  border: 1px solid rgba(201,168,76,0.4);
   cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.22,1,0.36,1);
 }
 .btn-outline:hover {
-  background: rgba(198, 150, 63, 0.1);
-  box-shadow: 0 0 22px rgba(243, 190, 99, 0.18);
+  background: rgba(201,168,76,0.08);
+  border-color: var(--color-gold);
   transform: translateY(-1px);
+  box-shadow: 0 4px 20px var(--color-glow);
 }
-.btn-outline:active { transform: translateY(0); }
 
-/* ─── No scrollbar ───────────────────────────────────────── */
+/* ── Product card hover glow ── */
+.card-hover {
+  transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s cubic-bezier(0.22,1,0.36,1);
+  border: 1px solid transparent;
+}
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px var(--color-glow);
+  border-color: rgba(201,168,76,0.3);
+}
+
+/* ── Frosted glass ── */
+.glass {
+  background: var(--color-bg-glass);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid rgba(201,168,76,0.12);
+}
+
+/* ── Marquee ── */
+.marquee-track {
+  display: flex;
+  animation: marquee 30s linear infinite;
+  white-space: nowrap;
+}
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* ── Candle flame ── */
+.flame {
+  animation: flicker 2.5s ease-in-out infinite alternate;
+  transform-origin: bottom center;
+}
+@keyframes flicker {
+  0%   { transform: scaleY(1) scaleX(1) rotate(-1deg); filter: brightness(1); }
+  33%  { transform: scaleY(1.08) scaleX(0.96) rotate(1.5deg); filter: brightness(1.15); }
+  66%  { transform: scaleY(0.95) scaleX(1.04) rotate(-0.5deg); filter: brightness(0.95); }
+  100% { transform: scaleY(1.05) scaleX(0.98) rotate(1deg); filter: brightness(1.1); }
+}
+
+/* ── Ember particle ── */
+.ember {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFD700 0%, #FF8C00 50%, transparent 100%);
+  pointer-events: none;
+  animation: emberRise var(--dur, 2.5s) ease-out forwards;
+}
+@keyframes emberRise {
+  0%   { opacity: 1; transform: translateY(0) translateX(0) scale(1); }
+  50%  { opacity: 0.7; }
+  100% { opacity: 0; transform: translateY(calc(-80px - var(--dist, 40px))) translateX(var(--drift, 20px)) scale(0.2); }
+}
+
+/* ── Scrollbar ── */
 .no-sb::-webkit-scrollbar { display: none; }
 .no-sb { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* ─── Product card ───────────────────────────────────────── */
-.prod-img-wrap {
-  overflow: hidden;
-  aspect-ratio: 1 / 1;
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--color-bg-deep); }
+::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.3); border-radius: 2px; }
+
+/* ── Divider ornament ── */
+.ornament-divider {
+  display: flex; align-items: center; gap: 1rem;
+  color: rgba(201,168,76,0.4);
+  font-family: var(--font-display);
+  font-size: 1.2rem; letter-spacing: 0.4em;
+}
+.ornament-divider::before, .ornament-divider::after {
+  content: ''; flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent);
+}
+
+/* ── Skeleton loader ── */
+.skeleton {
+  background: linear-gradient(90deg, var(--color-bg-card) 25%, rgba(201,168,76,0.04) 50%, var(--color-bg-card) 75%);
+  background-size: 400% 100%;
+  animation: skeletonPulse 1.8s ease infinite;
+}
+@keyframes skeletonPulse { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+/* ── Countdown timer ── */
+.countdown-digit {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1;
+  color: var(--color-gold-light);
+  text-shadow: 0 0 20px rgba(201,168,76,0.5);
+}
+
+/* ── Quiz ── */
+.quiz-option {
+  border: 1px solid rgba(201,168,76,0.2);
   background: var(--color-bg-card);
+  transition: all 0.25s cubic-bezier(0.22,1,0.36,1);
+  cursor: pointer;
 }
-.prod-img-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.prod-card:hover .prod-img-wrap img { transform: scale(1.07); }
-.prod-card:hover .quick-buy { opacity: 1; }
-.quick-buy {
-  opacity: 0;
-  transition: opacity 0.35s ease;
+.quiz-option:hover, .quiz-option.selected {
+  border-color: var(--color-gold);
+  background: rgba(201,168,76,0.08);
+  box-shadow: 0 0 20px var(--color-glow);
 }
 
-/* ─── Scroll reveal ──────────────────────────────────────── */
-.reveal {
+/* ── Radar chart tooltip ── */
+.scent-radar {
   opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateY(8px) scale(0.95);
+  transition: all 0.3s cubic-bezier(0.22,1,0.36,1);
+  pointer-events: none;
 }
-.reveal.visible {
+.group:hover .scent-radar {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
-/* ─── Scent card ─────────────────────────────────────────── */
-.scent-selected {
-  border-color: rgba(198, 150, 63, 0.7) !important;
-  box-shadow: 0 0 18px rgba(243, 190, 99, 0.14);
+/* ── Gift card preview ── */
+.gift-preview {
+  background: linear-gradient(135deg, #1a1208 0%, #0d0d0d 50%, #1a1208 100%);
+  border: 1px solid rgba(201,168,76,0.3);
+  box-shadow: 0 0 60px rgba(201,168,76,0.1), inset 0 1px 0 rgba(201,168,76,0.2);
 }
 
-/* ─── Wax swatch ─────────────────────────────────────────── */
+/* ── Glow ring ── */
+.glow-ring {
+  box-shadow: 0 0 0 1px rgba(201,168,76,0.2), 0 0 30px rgba(201,168,76,0.1);
+}
+
+/* ── Input ── */
+.input-luxury {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(201,168,76,0.2);
+  color: var(--color-cream);
+  font-family: var(--font-sans);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.input-luxury:focus {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.08);
+}
+.input-luxury::placeholder { color: var(--color-faint); }
+
+/* ── Section spacing ── */
+.section { padding: 5rem 0; }
+.section-sm { padding: 3rem 0; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+
+/* ── Accordion body ── */
+.acc-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+.acc-body.open { max-height: 600px; }
+
+/* ── Wax swatch ── */
 .swatch {
   width: 36px;
   height: 36px;
@@ -140,33 +294,10 @@ body {
 }
 .swatch.active {
   border-color: var(--color-gold);
-  box-shadow: 0 0 12px rgba(243, 190, 99, 0.45);
+  box-shadow: 0 0 12px rgba(201,168,76,0.45);
 }
 
-/* ─── Step bar ───────────────────────────────────────────── */
-.step-active { color: var(--color-gold); }
-.step-done   { color: var(--color-gold-mid); }
-.step-todo   { color: var(--color-border); }
-
-/* ─── Label styles ───────────────────────────────────────── */
-.label-ornate, .label-minimal, .label-script, .label-mono {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 6px;
-  text-align: center;
-  transition: border-color 0.25s, background 0.25s;
-  cursor: pointer;
-  border: 1px solid transparent;
-  border-radius: 4px;
-}
-.label-ornate.sel, .label-minimal.sel, .label-script.sel, .label-mono.sel {
-  border-color: var(--color-gold-mid);
-  background: rgba(198, 150, 63, 0.1);
-}
-
-/* ─── Toast ──────────────────────────────────────────────── */
+/* ── Toast ── */
 @keyframes toastIn {
   from { opacity: 0; transform: translateX(28px); }
   to   { opacity: 1; transform: translateX(0); }
@@ -175,86 +306,3 @@ body {
   from { opacity: 1; transform: translateX(0); }
   to   { opacity: 0; transform: translateX(28px); }
 }
-
-/* ─── Skeleton shimmer ───────────────────────────────────── */
-.skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--color-bg-card) 25%,
-    var(--color-bg-high) 50%,
-    var(--color-bg-card) 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.6s ease infinite;
-}
-@keyframes shimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-/* ─── Gold shimmer text ──────────────────────────────────── */
-@keyframes goldShimmer {
-  0%   { background-position: -200% center; }
-  100% { background-position:  200% center; }
-}
-.text-shimmer {
-  background: linear-gradient(
-    90deg,
-    var(--color-gold-dim) 0%,
-    var(--color-gold) 40%,
-    var(--color-cream) 50%,
-    var(--color-gold) 60%,
-    var(--color-gold-dim) 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: goldShimmer 4s linear infinite;
-}
-
-/* ─── Card hover glow ────────────────────────────────────── */
-.card-hover {
-  transition: box-shadow 0.4s ease, transform 0.4s ease;
-}
-.card-hover:hover {
-  box-shadow: 0 8px 40px rgba(198, 150, 63, 0.09);
-  transform: translateY(-3px);
-}
-
-/* ─── Ornament divider ───────────────────────────────────── */
-.ornament-divider {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-.ornament-divider::before,
-.ornament-divider::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--color-border), transparent);
-}
-
-/* ─── Candle flame ───────────────────────────────────────── */
-@keyframes flicker {
-  0%, 100% { opacity: 1; transform: scaleY(1) translateX(0); }
-  25%       { opacity: 0.9; transform: scaleY(1.04) translateX(1px); }
-  50%       { opacity: 0.95; transform: scaleY(0.97) translateX(-1px); }
-  75%       { opacity: 1; transform: scaleY(1.02) translateX(0.5px); }
-}
-.flame {
-  animation: flicker 2.2s ease-in-out infinite;
-  transform-origin: center bottom;
-}
-
-/* ─── Candle preview ─────────────────────────────────────── */
-.candle-body { transition: background 0.4s, fill 0.4s; }
-
-/* ─── Accordion body ─────────────────────────────────────── */
-.acc-body {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease;
-}
-.acc-body.open { max-height: 600px; }
