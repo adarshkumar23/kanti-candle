@@ -55,12 +55,16 @@ export default function AdminProducts() {
       });
       const data = await res.json();
       if (data.url) {
-        setForm({ ...form, imageUrl: data.url });
+        setForm((prev) => ({ ...prev, imageUrl: data.url }));
+      } else {
+        alert(`Upload failed: ${data.error || "Unknown error"}`);
       }
     } catch {
-      alert("Upload failed. Please try again.");
+      alert("Upload failed — check your internet connection and try again.");
     }
     setUploading(false);
+    // Reset file input so the same file can be re-selected after an error
+    e.target.value = "";
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
