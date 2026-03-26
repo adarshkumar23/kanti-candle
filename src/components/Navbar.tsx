@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 
@@ -88,16 +87,14 @@ export default function Navbar() {
             </nav>
           </div>
 
-          {/* CENTER — Logo */}
-          <Link href="/" className="absolute left-1/2 -translate-x-1/2 hover:opacity-80 transition-opacity duration-300">
-            <Image
-              src="/kanti-logo.svg"
-              alt="Kanti Candles"
-              width={80}
-              height={32}
-              className="h-8 w-auto"
-              priority
-            />
+          {/* CENTER — Wordmark */}
+          <Link href="/" className="absolute left-1/2 -translate-x-1/2 hover:opacity-80 transition-opacity duration-300 text-center leading-none">
+            <div className="text-[18px] font-light tracking-[0.35em] text-[#e6c364] uppercase" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+              KANTI
+            </div>
+            <div className="text-[7px] tracking-[0.4em] text-[#6e6754] uppercase text-center mt-[1px]">
+              candles
+            </div>
           </Link>
 
           {/* RIGHT — search + cart */}
@@ -133,7 +130,10 @@ export default function Navbar() {
       >
         {/* Close button */}
         <div className="flex justify-between items-center px-6 py-5 border-b border-[#4d4637]/20">
-          <Image src="/kanti-logo.svg" alt="Kanti Candles" width={80} height={32} className="h-8 w-auto" />
+          <div className="text-center leading-none">
+            <div className="text-[18px] font-light tracking-[0.35em] text-[#e6c364] uppercase" style={{ fontFamily: "'Cormorant Garamond', serif" }}>KANTI</div>
+            <div className="text-[7px] tracking-[0.4em] text-[#6e6754] uppercase mt-[1px]">candles</div>
+          </div>
           <button
             onClick={() => setMenuOpen(false)}
             className="text-[#6e6754] hover:text-[#e6c364] transition-colors duration-300"

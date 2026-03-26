@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useState } from "react";
 
 function InstagramIcon({ className }: { className?: string }) {
@@ -56,13 +55,10 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-10 mb-12">
           {/* Brand */}
           <div className="shrink-0">
-            <Image
-              src="/kanti-logo.svg"
-              alt="Kanti Candles"
-              width={80}
-              height={32}
-              className="h-8 w-auto mb-3"
-            />
+            <div className="leading-none mb-3">
+              <div className="text-[20px] font-light tracking-[0.35em] text-[#e6c364] uppercase" style={{ fontFamily: "'Cormorant Garamond', serif" }}>KANTI</div>
+              <div className="text-[7px] tracking-[0.4em] text-[#6e6754] uppercase mt-[2px]">candles</div>
+            </div>
             <p className="text-[9px] uppercase tracking-[0.25em] text-[#6e6754]">
               Artisanal candles, hand-poured in Gurgaon
             </p>
