@@ -144,7 +144,7 @@ export default function ProductDetail() {
           {[
             { icon: "eco", label: "Pure Soy Wax", sub: "100% natural, clean-burning" },
             { icon: "schedule", label: "80–100 Hour Burn Time", sub: size.burnTime },
-            { icon: "water_drop", label: "Hand-Poured, Batch Limited", sub: "Small-batch, Gurgaon atelier" },
+            { icon: "water_drop", label: "Hand-Poured, Batch Limited", sub: "Small-batch, Gurgaon studio" },
           ].map(({ icon, label, sub }) => (
             <div key={label} className="flex items-center gap-4">
               <div className="w-10 h-10 bg-[#1c1c1c] rounded-sm flex items-center justify-center shrink-0">

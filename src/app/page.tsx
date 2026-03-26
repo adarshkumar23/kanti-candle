@@ -323,7 +323,7 @@ export default function Home() {
             className="serif-italic text-3xl text-[#e5e2e1]"
             style={{ fontFamily: '"Cormorant Garamond", serif', fontStyle: "italic" }}
           >
-            Join the Atelier
+            Join the Kanti
           </h2>
           <p className="text-[11px] text-[#6e6754] mt-4 mb-8 leading-relaxed">
             Be the first to know about new collections and exclusive offers. Claim 10% off your first order.

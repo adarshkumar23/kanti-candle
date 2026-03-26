@@ -25,7 +25,7 @@ const navCols = [
     ],
   },
   {
-    heading: "Atelier",
+    heading: "Kanti",
     links: [
       { href: "/about", label: "Our Story" },
       { href: "/customize", label: "Custom Studio" },
@@ -129,7 +129,7 @@ export default function Footer() {
         {/* Bottom row */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-3">
           <p className="text-[9px] uppercase tracking-widest text-[#4d4637]">
-            © KANTI ATELIER MMXXVI
+            © KANTI CANDLES MMXXVI
           </p>
           <p className="text-[9px] uppercase tracking-widest text-[#4d4637]">
             Sector 92, Gurgaon, Haryana
