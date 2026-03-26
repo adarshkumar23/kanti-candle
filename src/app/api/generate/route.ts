@@ -14,9 +14,9 @@ export async function POST(request: Request) {
       apiKey: process.env.GEMINI_API_KEY || "", // Ensure you add this to your .env file
     });
 
-    // Call Imagen 3 via the Gemini API
+    // Call the specified internal model via the Gemini API
     const response = await ai.models.generateImages({
-      model: 'imagen-3.0-generate-002',
+      model: 'nano-banana-2',
       prompt: `A highly realistic, luxurious customized candle: ${prompt}. Photorealistic, elegant lighting, shallow depth of field, commercial product photography, 4k.`,
       config: {
         numberOfImages: 1,
