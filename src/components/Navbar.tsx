@@ -75,11 +75,13 @@ export default function Navbar() {
                 <Link
                   key={href}
                   href={href}
-                  className={`text-[10px] uppercase tracking-[0.2em] transition-colors duration-300 ${
-                    isActive(href)
-                      ? "text-[#e6c364]"
-                      : "text-[#cac5be] hover:text-[#e6c364]"
-                  }`}
+                  className={`relative text-[10px] uppercase tracking-[0.2em] transition-colors duration-[500ms] ease-out
+                after:absolute after:bottom-[-2px] after:left-0 after:h-[1px] after:bg-[#e6c364]
+                after:transition-all after:duration-[500ms] after:ease-[cubic-bezier(0.16,1,0.3,1)]
+                ${isActive(href)
+                  ? "text-[#e6c364] after:w-full"
+                  : "text-[#cac5be] hover:text-[#e6c364] after:w-0 hover:after:w-full"
+                }`}
                 >
                   {label}
                 </Link>
@@ -124,9 +126,12 @@ export default function Navbar() {
 
       {/* ── Mobile Full-Screen Menu ──────────────────────────── */}
       <div
-        className={`fixed inset-0 z-[70] bg-[#0d0d0d]/95 backdrop-blur-xl flex flex-col transition-all duration-[700ms] ${
-          menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        className={`fixed inset-0 z-[70] bg-[#0d0d0d]/95 backdrop-blur-xl flex flex-col transition-all duration-[600ms] ${
+          menuOpen
+            ? "opacity-100 pointer-events-auto translate-y-0"
+            : "opacity-0 pointer-events-none -translate-y-2"
         }`}
+        style={{ transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}
       >
         {/* Close button */}
         <div className="flex justify-between items-center px-6 py-5 border-b border-[#4d4637]/20">
