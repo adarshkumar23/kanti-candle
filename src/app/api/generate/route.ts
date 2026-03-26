@@ -16,7 +16,7 @@ export async function POST(request: Request) {
 
     // Call Imagen 3 via the Gemini API
     const response = await ai.models.generateImages({
-      model: 'imagen-3.0-generate-001',
+      model: 'imagen-3.0-generate-002',
       prompt: `A highly realistic, luxurious customized candle: ${prompt}. Photorealistic, elegant lighting, shallow depth of field, commercial product photography, 4k.`,
       config: {
         numberOfImages: 1,
