@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ShoppingBag, Menu, X, Search } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { products } from "@/data/products";
@@ -50,8 +51,8 @@ export default function Navbar() {
             <Menu className="w-6 h-6" />
           </button>
 
-          <Link href="/" className="font-news text-2xl tracking-[0.35em] text-[var(--color-gold-mid)] hover:text-[var(--color-gold)] transition-colors font-light">
-            KANTI
+          <Link href="/" className="hover:opacity-90 transition-opacity">
+            <Image src="/kanti-logo.svg" alt="Kanti Candles" width={130} height={74} priority />
           </Link>
 
           <nav className="hidden lg:flex items-center gap-8">
@@ -137,7 +138,9 @@ export default function Navbar() {
         <button onClick={toggleMobileMenu} className="self-end text-[var(--color-faint)] hover:text-[var(--color-gold)] mb-4">
           <X className="w-6 h-6" />
         </button>
-        <div className="font-news text-3xl tracking-[0.3em] text-[var(--color-gold-mid)] mb-4">KANTI</div>
+        <div className="mb-4">
+          <Image src="/kanti-logo.svg" alt="Kanti Candles" width={140} height={80} />
+        </div>
         <Link href="/" onClick={toggleMobileMenu} className="text-left font-sans text-xs uppercase tracking-widest text-[var(--color-muted)] hover:text-[var(--color-gold)] py-3 border-b border-[var(--color-border)]/30">Home</Link>
         <Link href="/shop" onClick={toggleMobileMenu} className="text-left font-sans text-xs uppercase tracking-widest text-[var(--color-muted)] hover:text-[var(--color-gold)] py-3 border-b border-[var(--color-border)]/30">Shop</Link>
         <Link href="/customize" onClick={toggleMobileMenu} className="text-left font-sans text-xs uppercase tracking-widest text-[var(--color-gold)] py-3 border-b border-[var(--color-border)]/30 flex items-center gap-2"><span>✦</span> Customize</Link>

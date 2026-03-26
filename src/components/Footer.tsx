@@ -1,12 +1,28 @@
 import Link from "next/link";
+import Image from "next/image";
+import { Instagram, MessageCircle, Mail } from "lucide-react";
 
 export default function Footer() {
   return (
     <footer className="bg-[var(--color-bg-deep)] border-t border-[var(--color-border)]/10 px-8 md:px-16 py-16">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <div className="font-news text-4xl tracking-[0.35em] text-[var(--color-gold-mid)]">KANTI</div>
+        <div className="text-center mb-14">
+          <div className="mx-auto w-fit">
+            <Image src="/kanti-logo.svg" alt="Kanti Candles" width={180} height={102} />
+          </div>
           <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-faint)]/40 mt-3">Hand-poured with love in India</p>
+          {/* Social Icons */}
+          <div className="flex justify-center gap-4 mt-6">
+            <a href="https://www.instagram.com/kanticandles/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-[var(--color-border)]/25 flex items-center justify-center hover:border-[var(--color-gold)]/50 hover:bg-[var(--color-gold)]/5 transition-all group">
+              <Instagram className="w-4 h-4 text-[var(--color-faint)]/50 group-hover:text-[var(--color-gold)] transition-colors" />
+            </a>
+            <a href="https://wa.me/?text=Hi%20Kanti%20Candle!" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full border border-[var(--color-border)]/25 flex items-center justify-center hover:border-[var(--color-gold)]/50 hover:bg-[var(--color-gold)]/5 transition-all group">
+              <MessageCircle className="w-4 h-4 text-[var(--color-faint)]/50 group-hover:text-[var(--color-gold)] transition-colors" />
+            </a>
+            <a href="mailto:kanticandle@gmail.com" className="w-10 h-10 rounded-full border border-[var(--color-border)]/25 flex items-center justify-center hover:border-[var(--color-gold)]/50 hover:bg-[var(--color-gold)]/5 transition-all group">
+              <Mail className="w-4 h-4 text-[var(--color-faint)]/50 group-hover:text-[var(--color-gold)] transition-colors" />
+            </a>
+          </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-12">
           <div className="space-y-4">
@@ -34,8 +50,9 @@ export default function Footer() {
             <Link href="/shipping" className="block font-sans text-[10px] uppercase tracking-widest text-[var(--color-faint)]/50 hover:text-[var(--color-gold)] transition-colors">Shipping & Returns</Link>
           </div>
         </div>
-        <div className="border-t border-[var(--color-border)]/10 pt-8 text-center">
-          <p className="font-sans text-[9px] tracking-widest uppercase text-[var(--color-faint)]/30">© 2026 Kanti Candle. All rights reserved.</p>
+        <div className="border-t border-[var(--color-border)]/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="font-sans text-[9px] tracking-widest uppercase text-[var(--color-faint)]/30">&copy; 2026 Kanti Candle. All rights reserved.</p>
+          <p className="font-sans text-[9px] tracking-widest uppercase text-[var(--color-faint)]/30">Sector 92, Gurgaon, Haryana, India</p>
         </div>
       </div>
     </footer>

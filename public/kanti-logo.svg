@@ -1,0 +1,14 @@
+<svg width="420" height="260" viewBox="0 0 420 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="420" height="260" fill="transparent"/>
+  <g stroke="#C6963F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M195 36C192 27 201 20 206 12C211 20 220 27 217 36C214 45 203 47 195 36Z"/>
+    <rect x="196" y="47" width="20" height="93" rx="7"/>
+    <path d="M206 52V33"/>
+    <path d="M186 81C193 69 209 70 227 86C245 102 260 104 273 89"/>
+    <path d="M184 80C191 92 209 91 228 74C246 58 261 55 272 67"/>
+  </g>
+  <g fill="#C6963F" font-family="DM Sans, Arial, sans-serif" text-anchor="middle">
+    <text x="210" y="193" font-size="44" letter-spacing="12">KANTI</text>
+    <text x="210" y="226" font-size="26" letter-spacing="4">CANDLES</text>
+  </g>
+</svg>
