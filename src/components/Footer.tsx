@@ -18,7 +18,7 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
           <div className="mx-auto w-fit">
-            <Image src="/kanti-logo.svg" alt="Kanti Candles" width={160} height={90} />
+            <Image src="/kanti-logo.svg" alt="Kanti Candles" width={120} height={68} />
           </div>
           <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-[var(--color-faint)]/40 mt-3">Hand-poured with love in India</p>
           {/* Social Icons */}
