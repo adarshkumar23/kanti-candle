@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find 'C:\\\\Users\\\\Ares salvator\\\\Desktop\\\\kanti-web\\\\.claude\\\\worktrees\\\\elated-leakey' -name tailwind.config* -o -name .env*)",
+      "Bash(npx next:*)",
+      "Bash(npx prisma:*)",
+      "Bash(powershell -Command \"Expand-Archive -Path ''C:\\\\Users\\\\Ares salvator\\\\Downloads\\\\stitch \\(1\\).zip'' -DestinationPath ''C:\\\\Users\\\\Ares salvator\\\\Downloads\\\\stitch-extracted'' -Force\")",
+      "Bash(powershell -Command \"Get-ChildItem -Path ''C:\\\\Users\\\\Ares salvator\\\\Downloads\\\\stitch-extracted'' -Recurse | Select-Object FullName, Length, LastWriteTime | Format-Table -AutoSize\")",
+      "Bash(npx tsc:*)",
+      "Bash(sed -i 's/Join the Atelier/Join the Kanti/g' src/app/page.tsx)",
+      "Bash(sed -i 's/Small-batch, Gurgaon atelier/Small-batch, Gurgaon studio/g' \"src/app/shop/[slug]/page.tsx\")",
+      "Bash(sed -i 's/heading: \"\"Atelier\"\"/heading: \"\"Kanti\"\"/g' src/components/Footer.tsx)",
+      "Bash(sed -i 's/© KANTI ATELIER MMXXVI/© KANTI CANDLES MMXXVI/g' src/components/Footer.tsx)",
+      "Bash(npm run:*)",
+      "Bash(node -e \":*)"
+    ]
+  }
+}
